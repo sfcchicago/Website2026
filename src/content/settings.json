@@ -1,14 +1,14 @@
 {
-  "liveUrl": "https://youtube.com/live/mYKKtloRgWA?feature=share",
-  "phone": "262-748-1547",
-  "email": "asshole@gmail.com",
-  "address": "5404 67th Street, Kenosha, WI 53142",
-  "giveUrl": "https://venmo.com/SFCKenosha",
-  "eventsUrl": "https://sfcchicago.churchcenter.com/pages/announcements",
   "verseText": "Come to me, all who labor and are heavy laden, and I will give you rest.",
-  "verseRef": "Matthew 11:28",
-  "tagline": "A family of believers in Kenosha, Wisconsin",
+  "liveUrl": "https://youtube.com/live/mYKKtloRgWA?feature=share",
   "facebookUrl": "https://www.facebook.com/SFC.CHICAGO",
   "youtubeUrl": "https://www.youtube.com/channel/UCceRiiIG0gckcM6_W26D2hw",
-  "instagramUrl": "https://instagram.com/sfc.chicago"
+  "phone": "262-748-1547",
+  "tagline": "A family of believers in Kenosha, Wisconsin",
+  "address": "5404 67th Street, Kenosha, WI 53142",
+  "eventsUrl": "https://sfcchicago.churchcenter.com/pages/announcements",
+  "email": "sfckenosha@gmail.com",
+  "instagramUrl": "https://instagram.com/sfc.chicago",
+  "giveUrl": "https://venmo.com/SFCKenosha",
+  "verseRef": "Matthew 11:28"
 }
