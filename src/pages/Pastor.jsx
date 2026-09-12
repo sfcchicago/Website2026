@@ -7,7 +7,6 @@ import { PastorDocument } from "../../tina/__generated__/types";
 import { isImageReady, preloadImage } from "../utils/preload";
 import { Church, CalendarBlank, MapPin, GraduationCap, Heart, Sparkle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
-import { useSiteData } from "../context/SiteContext";
 
 function TlAvatar({ person }) {
   const [imgErr, setImgErr] = useState(false);
@@ -60,6 +59,7 @@ function TlAvatar({ person }) {
 }
 
 const pastorInitial = {
+  __typename: "Pastor",
   ...pastor,
   _sys: {
     filename: "pastor",
@@ -73,14 +73,13 @@ const pastorInitial = {
 };
 
 export default function Pastor() {
-  const { pastor: livePastor } = useSiteData();
   const { data } = useTina({
     query: PastorDocument,
     variables: { relativePath: "pastor.json" },
-    data: { pastor: livePastor || pastorInitial },
+    data: { pastor: pastorInitial },
   });
 
-  const currentPastor = data?.pastor || livePastor || pastor;
+  const currentPastor = data?.pastor || pastor;
   const [src, setSrc] = useState(currentPastor.photo);
   const [imgErr, setImgErr] = useState(false);
   const [isLoaded, setIsLoaded] = useState(() => isImageReady(currentPastor.photo));

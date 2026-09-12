@@ -1,11 +1,10 @@
-import { useEffect } from "react";
 import Landing from "../components/Landing";
 import { useTina } from "tinacms/dist/react";
 import { SettingsDocument } from "../../tina/__generated__/types";
 import initialSettings from "../content/settings.json";
-import { useSiteSettings } from "../context/SiteContext";
 
 const settingsInitial = {
+  __typename: "Settings",
   ...initialSettings,
   _sys: {
     filename: "settings",
@@ -19,21 +18,13 @@ const settingsInitial = {
 };
 
 export default function Home() {
-  const { settings: liveSettings, setSettings } = useSiteSettings();
-  const initialData = liveSettings ? { ...settingsInitial, ...liveSettings } : settingsInitial;
   const { data } = useTina({
     query: SettingsDocument,
     variables: { relativePath: "settings.json" },
-    data: { settings: initialData },
+    data: { settings: settingsInitial },
   });
 
-  const activeSettings = data?.settings || liveSettings || initialSettings;
-
-  useEffect(() => {
-    if (data?.settings) {
-      setSettings((prev) => ({ ...prev, ...data.settings }));
-    }
-  }, [data?.settings, setSettings]);
+  const activeSettings = data?.settings || initialSettings;
 
   return <Landing previewSettings={activeSettings} />;
 }

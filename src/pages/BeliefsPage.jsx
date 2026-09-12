@@ -6,7 +6,6 @@ import initialBeliefs from "../content/beliefs.json";
 import { useTina, tinaField } from "tinacms/dist/react";
 import { BeliefsDocument } from "../../tina/__generated__/types";
 import { CaretDown, BookOpenText, CheckCircle, ArrowRight } from "@phosphor-icons/react";
-import { useSiteData } from "../context/SiteContext";
 
 const fullStatementTopics = [
   "Water Baptism",
@@ -17,6 +16,7 @@ const fullStatementTopics = [
 ];
 
 const beliefsInitial = {
+  __typename: "Beliefs",
   ...initialBeliefs,
   _sys: {
     filename: "beliefs",
@@ -30,16 +30,14 @@ const beliefsInitial = {
 };
 
 export default function Beliefs() {
-  const { beliefs: liveBeliefs } = useSiteData();
-  const initialData = liveBeliefs ? { ...beliefsInitial, items: liveBeliefs } : beliefsInitial;
   const { data } = useTina({
     query: BeliefsDocument,
     variables: { relativePath: "beliefs.json" },
-    data: { beliefs: initialData },
+    data: { beliefs: beliefsInitial },
   });
 
-  const beliefsData = data?.beliefs || initialData;
-  const beliefsList = beliefsData?.items || liveBeliefs || initialBeliefs.items || [];
+  const beliefsData = data?.beliefs || initialBeliefs;
+  const beliefsList = beliefsData?.items || initialBeliefs.items || [];
 
   // Allow multiple beliefs to be open independently
   const [openIndices, setOpenIndices] = useState(() => new Set());
