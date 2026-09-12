@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { Reveal } from "../components/Reveal";
-import { beliefs } from "../data";
+import initialBeliefs from "../content/beliefs.json";
+import { useTina } from "tinacms/dist/react";
+import { BeliefsDocument } from "../../tina/__generated__/types";
 import { CaretDown, BookOpenText, CheckCircle, ArrowRight } from "@phosphor-icons/react";
 
 const fullStatementTopics = [
@@ -14,6 +16,15 @@ const fullStatementTopics = [
 ];
 
 export default function Beliefs() {
+  const { data } = useTina({
+    query: BeliefsDocument,
+    variables: { relativePath: "beliefs.json" },
+    data: { beliefs: initialBeliefs },
+  });
+
+  const beliefsData = data?.beliefs || initialBeliefs;
+  const beliefsList = beliefsData?.items || initialBeliefs.items || [];
+
   // Allow multiple beliefs to be open independently
   const [openIndices, setOpenIndices] = useState(() => new Set());
 
@@ -42,7 +53,7 @@ export default function Beliefs() {
           <div className="beliefs-container">
             <Reveal>
               <div className="beliefs-list">
-                {beliefs.map((b, i) => (
+                {beliefsList.map((b, i) => (
                   <div
                     key={b.title}
                     className={`belief-item${openIndices.has(i) ? " is-open" : ""}`}

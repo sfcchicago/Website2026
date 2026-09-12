@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon } from "@phosphor-icons/react";
 import { nav, church } from "../data";
 import { preloadRoute } from "../utils/preload";
+import { useSiteSettings } from "../context/SiteContext";
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
@@ -47,6 +48,9 @@ export default function Nav() {
     document.body.style.overflow = open ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [open]);
+
+  const { settings } = useSiteSettings();
+  const liveUrl = settings?.liveUrl || church.links.live;
 
   return (
     <>
@@ -96,7 +100,7 @@ export default function Nav() {
             >
               {theme === "light" ? <Moon size={18} weight="fill" /> : <Sun size={18} weight="fill" />}
             </button>
-            <a className="btn btn-secondary btn-sm" href={church.links.live} target="_blank" rel="noreferrer">
+            <a className="btn btn-secondary btn-sm" href={liveUrl} target="_blank" rel="noreferrer">
               Watch Live
             </a>
             <Link className="btn btn-primary btn-sm" to="/contact">
@@ -137,7 +141,7 @@ export default function Nav() {
               ))}
             </div>
             <div className="mobile-actions">
-              <a className="btn btn-secondary" href={church.links.live} target="_blank" rel="noreferrer">
+              <a className="btn btn-secondary" href={liveUrl} target="_blank" rel="noreferrer">
                 Watch Live
               </a>
               <Link className="btn btn-primary" to="/contact">

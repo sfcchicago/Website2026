@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import PageHeader from "../components/PageHeader";
 import { Reveal, SectionHead } from "../components/Reveal";
 import { pastor, pastorHistory, REMOTE_UP } from "../data";
+import { useTina } from "tinacms/dist/react";
+import { PastorDocument } from "../../tina/__generated__/types";
 import { isImageReady, preloadImage } from "../utils/preload";
 import { Church, CalendarBlank, MapPin, GraduationCap, Heart, Sparkle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
@@ -57,9 +59,20 @@ function TlAvatar({ person }) {
 }
 
 export default function Pastor() {
-  const [src, setSrc] = useState(pastor.photo);
+  const { data } = useTina({
+    query: PastorDocument,
+    variables: { relativePath: "pastor.json" },
+    data: { pastor },
+  });
+
+  const currentPastor = data?.pastor || pastor;
+  const [src, setSrc] = useState(currentPastor.photo);
   const [imgErr, setImgErr] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(() => isImageReady(pastor.photo));
+  const [isLoaded, setIsLoaded] = useState(() => isImageReady(currentPastor.photo));
+
+  useEffect(() => {
+    setSrc(currentPastor.photo);
+  }, [currentPastor.photo]);
 
   useEffect(() => {
     if (src && !isImageReady(src)) {
@@ -75,13 +88,14 @@ export default function Pastor() {
     }
   };
 
-  const initials = pastor.name
+  const initials = (currentPastor.name || "Pastor")
     .split(" ")
     .map((w) => w[0])
     .join("")
     .slice(0, 2);
 
-  const [lead, ...rest] = pastor.bio;
+  const bioList = Array.isArray(currentPastor.bio) ? currentPastor.bio : [currentPastor.bio || ""];
+  const [lead = "", ...rest] = bioList;
 
   return (
     <>
@@ -97,27 +111,27 @@ export default function Pastor() {
             <Reveal delay={0.08} className="pastor-media-col">
               <div
                 className="pastor-photo-wrap"
-                data-person-name={pastor.name}
+                data-person-name={currentPastor.name}
               >
                 <div className="pastor-photo">
                   <span className="pastor-placeholder" aria-hidden="true">{initials}</span>
                   {src && !imgErr && (
                     <img
                       src={src}
-                      alt={`${pastor.name} and Sis. Mini Johnson`}
+                      alt={`${currentPastor.name} and Sis. Mini Johnson`}
                       loading="eager"
                       decoding="async"
                       onLoad={() => setIsLoaded(true)}
                       onError={handleError}
                       className={isLoaded ? "is-loaded" : "is-loading"}
                       style={{
-                        "--photo-position": pastor.photoPosition || "center 18%",
-                        "--photo-scale": pastor.photoScale ? String(pastor.photoScale) : "1",
+                        "--photo-position": currentPastor.photoPosition || "center 18%",
+                        "--photo-scale": currentPastor.photoScale ? String(currentPastor.photoScale) : "1",
                       }}
                     />
                   )}
                   <div className="pastor-photo-tag">
-                    <span>Rev. M. G. Johnson &amp; Sis. Mini Johnson</span>
+                    <span>{currentPastor.name} &amp; Sis. Mini Johnson</span>
                   </div>
                 </div>
               </div>
@@ -130,7 +144,7 @@ export default function Pastor() {
                     <span className="aesthetic-dot" />
                     <span>A Heart for the Flock</span>
                   </div>
-                  <span className="aesthetic-year">{pastor.since}</span>
+                  <span className="aesthetic-year">{currentPastor.since}</span>
                 </div>
 
                 <blockquote className="aesthetic-quote">
@@ -146,7 +160,7 @@ export default function Pastor() {
                       whileHover={{ y: -2, scale: 1.03 }}
                       transition={{ type: "spring", stiffness: 450, damping: 20 }}
                     >
-                      <MapPin weight="duotone" /> {pastor.location}
+                      <MapPin weight="duotone" /> {currentPastor.location}
                     </motion.span>
                     <motion.span
                       className="aesthetic-pill"
@@ -178,13 +192,13 @@ export default function Pastor() {
               <div className="pastor-header-block">
                   <div className="pastor-badge-row">
                     <span className="badge">
-                      <span className="badge-dot" /> {pastor.role}
+                      <span className="badge-dot" /> {currentPastor.role}
                     </span>
-                    <span className="badge-mono">{pastor.since}</span>
+                    <span className="badge-mono">{currentPastor.since}</span>
                   </div>
-                  <h1 className="pastor-heading">{pastor.name}</h1>
+                  <h1 className="pastor-heading">{currentPastor.name}</h1>
                   <p className="pastor-subhead">
-                    Faithful shepherd of Sharon Fellowship Church &bull; {pastor.location}
+                    Faithful shepherd of Sharon Fellowship Church &bull; {currentPastor.location}
                   </p>
                 </div>
 

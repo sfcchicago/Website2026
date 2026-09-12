@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } fr
 import { ArrowRight, MapPin, Play } from "@phosphor-icons/react";
 import { church, mission, services } from "../data";
 import { preloadRoute, preloadImage } from "../utils/preload";
+import { useSiteSettings } from "../context/SiteContext";
 import img1 from "../assets/DSC04618.JPG";
 import img2 from "../assets/DSC07464.JPG";
 import img3 from "../assets/DSC08784.JPG";
@@ -122,6 +123,8 @@ let persistentHeroIndex = 0;
 
 function Hero() {
   const reduce = useReducedMotion();
+  const { settings } = useSiteSettings();
+  const liveUrl = settings?.liveUrl || church.links.live;
   const [currentIndex, setCurrentIndex] = useState(persistentHeroIndex);
   const [prevIndex, setPrevIndex] = useState(null);
 
@@ -273,7 +276,7 @@ function Hero() {
             Plan your visit
             <span className="btn-ico"><ArrowRight size={14} weight="bold" /></span>
           </Link>
-          <a className="btn btn-secondary" href={church.links.live} target="_blank" rel="noreferrer">
+          <a className="btn btn-secondary" href={liveUrl} target="_blank" rel="noreferrer">
             <Play size={14} weight="fill" /> Watch live
           </a>
         </motion.div>
@@ -357,20 +360,23 @@ function GlassChip({ children, as = "div", href, target, rel, className = "" }) 
 function Verse() {
   const ref = useRef(null);
   const reduce = useReducedMotion();
+  const { settings } = useSiteSettings();
+  const verseText = settings?.verseText || church.verse.text;
+  const verseRef = settings?.verseRef || church.verse.ref;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 0.85", "center 0.35"],
   });
 
   const line = useTransform(scrollYProgress, [0.1, 0.95], [0, 1]);
-  const en = church.verse.text.split(" ");
+  const en = verseText.split(" ");
   const ml = church.verse.ml.split(" ");
 
   return (
     <section className="verse-section" ref={ref}>
       <div className="container">
         <div className="verse-refs">
-          <p className="verse-ref">{church.verse.ref}</p>
+          <p className="verse-ref">{verseRef}</p>
           <p className="verse-ref" lang="ml">{church.verse.mlRef}</p>
         </div>
         <div className="verse-grid">

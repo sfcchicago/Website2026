@@ -1,9 +1,21 @@
 import PageHeader from "../components/PageHeader";
 import { Reveal } from "../components/Reveal";
 import PersonCard from "../components/PersonCard";
-import { board, ministerialSupport } from "../data";
+import initialLeadership from "../content/leadership.json";
+import { useTina } from "tinacms/dist/react";
+import { LeadershipDocument } from "../../tina/__generated__/types";
 
 export default function Leadership() {
+  const { data } = useTina({
+    query: LeadershipDocument,
+    variables: { relativePath: "leadership.json" },
+    data: { leadership: initialLeadership },
+  });
+
+  const leadership = data?.leadership || initialLeadership;
+  const board = leadership?.board || initialLeadership.board || [];
+  const ministerialSupport = leadership?.ministerialSupport || initialLeadership.ministerialSupport || [];
+
   return (
     <>
       <PageHeader
