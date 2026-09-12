@@ -1,35 +1,144 @@
 {
   "board": [
-    { "name": "Rev. M. G. Johnson", "role": "President", "photo": "/people/new_headshots/Pr.-M.-G.-Johnson.jpg" },
-    { "name": "James Oommen", "role": "Secretary", "photo": "/people/new_headshots/James-Oommen.jpg" },
-    { "name": "Subin Mathew", "role": "Treasurer", "photo": "/people/new_headshots/Subin-Mathew.jpg" },
-    { "name": "Saji John", "role": "Board Member", "photo": "/people/new_headshots/Saji-John.jpg" },
-    { "name": "Dani Mani", "role": "Board Member", "photo": "/people/new_headshots/Dani-Mani.jpg" },
-    { "name": "Titus Mathews", "role": "Board Member", "photo": "/people/titus-mathews_orig.png?v=2" },
-    { "name": "C. I. Abraham", "role": "Board Member", "photo": "/people/ci-abraham_orig.png?v=2" },
-    { "name": "Sherry George", "role": "Board Member", "photo": "/people/new_headshots/Sherry-George.jpg" }
+    {
+      "name": "Rev. M. G. Johnson",
+      "role": "President",
+      "photo": "/people/new_headshots/Pr.-M.-G.-Johnson.jpg",
+      "photoPosition": "center 20%"
+    },
+    {
+      "name": "James Oommen",
+      "role": "Secretary",
+      "photo": "/people/new_headshots/James-Oommen.jpg"
+    },
+    {
+      "name": "Subin Mathew",
+      "role": "Treasurer",
+      "photo": "/people/new_headshots/Subin-Mathew.jpg"
+    },
+    {
+      "name": "Saji John",
+      "role": "Board Member",
+      "photo": "/people/new_headshots/Saji-John.jpg"
+    },
+    {
+      "name": "Dani Mani",
+      "role": "Board Member",
+      "photo": "/people/new_headshots/Dani-Mani.jpg"
+    },
+    {
+      "name": "Titus Mathews",
+      "role": "Board Member",
+      "photo": "/people/titus-mathews_orig.png?v=2"
+    },
+    {
+      "name": "C. I. Abraham",
+      "role": "Board Member",
+      "photo": "/people/ci-abraham_orig.png?v=2"
+    },
+    {
+      "name": "Sherry George",
+      "role": "Board Member",
+      "photo": "/people/new_headshots/Sherry-George.jpg"
+    }
   ],
   "ministerialSupport": [
-    { "name": "Johnson Oommen", "role": "Malayalam Worship Coordinator", "photo": "/people/johnson-oommen_orig.png" },
-    { "name": "Erin Mani", "role": "English Worship Coordinator", "photo": "/people/erin-mani_orig.png" },
-    { "name": "Mini Johnson", "role": "Ladies Coordinator", "photo": "/people/new_headshots/Mini-Johnson.jpg" },
-    { "name": "Vineeta Oommen", "role": "Young Women's Coordinator", "photo": "/people/new_headshots/Vineeta-Oommen.jpg" },
-    { "name": "Reeja Kurian", "role": "Youth Coordinator", "photo": "/people/new_headshots/Reeja-Kurian.jpg" },
-    { "name": "Nathan Oommen", "role": "RISE Coordinator", "photo": "/people/new_headshots/Dr.-Nathan-Oommen.jpg" },
-    { "name": "Jacob George", "role": "Junior Worship Coordinator", "photo": "/people/edited/img-7866-edited.png" },
-    { "name": "Titus Mathews", "role": "Evangelism / Missions Coordinator", "photo": "/people/titus-mathews-2_orig.png" },
-    { "name": "C. T. Kurian", "role": "Hospitality Coordinator", "photo": "/people/new_headshots/C.T.-Kurian.jpg" },
-    { "name": "Achu Oommen", "role": "Hospitality Coordinator", "photo": "/people/new_headshots/Achu-Oommen.jpg" },
-    { "name": "Aiden John", "role": "Multimedia Coordinator", "photo": "/people/aiden-john-2_orig.png" },
-    { "name": "Jeremy Oommen", "role": "Associate Multimedia Coordinator", "photo": "/people/jeremy-oommen_orig.png" }
+    {
+      "name": "Johnson Oommen",
+      "role": "Malayalam Worship Coordinator",
+      "photo": "/people/johnson-oommen_orig.png"
+    },
+    {
+      "name": "Erin Mani",
+      "role": "English Worship Coordinator",
+      "photo": "/people/erin-mani_orig.png"
+    },
+    {
+      "name": "Mini Johnson",
+      "role": "Ladies Coordinator",
+      "photo": "/people/new_headshots/Mini-Johnson.jpg"
+    },
+    {
+      "name": "Vineeta Oommen",
+      "role": "Young Women's Coordinator",
+      "photo": "/people/new_headshots/Vineeta-Oommen.jpg"
+    },
+    {
+      "name": "Reeja Kurian",
+      "role": "Youth Coordinator",
+      "photo": "/people/new_headshots/Reeja-Kurian.jpg"
+    },
+    {
+      "name": "Nathan Oommen",
+      "role": "RISE Coordinator",
+      "photo": "/people/new_headshots/Dr.-Nathan-Oommen.jpg"
+    },
+    {
+      "name": "Jacob George",
+      "role": "Junior Worship Coordinator",
+      "photo": "/people/edited/img-7866-edited.png"
+    },
+    {
+      "name": "Titus Mathews",
+      "role": "Evangelism / Missions Coordinator",
+      "photo": "/people/titus-mathews-2_orig.png"
+    },
+    {
+      "name": "C. T. Kurian",
+      "role": "Hospitality Coordinator",
+      "photo": "/people/new_headshots/C.T.-Kurian.jpg"
+    },
+    {
+      "name": "Achu Oommen",
+      "role": "Hospitality Coordinator",
+      "photo": "/people/new_headshots/Achu-Oommen.jpg"
+    },
+    {
+      "name": "Aiden John",
+      "role": "Multimedia Coordinator",
+      "photo": "/people/aiden-john-2_orig.png"
+    },
+    {
+      "name": "Jeremy Oommen",
+      "role": "Associate Multimedia Coordinator",
+      "photo": "/people/jeremy-oommen_orig.png"
+    }
   ],
   "sundaySchool": [
-    { "name": "Dr. Sachin Davis", "role": "Principal, Sr. High School", "photo": "/people/new_headshots/Dr.-Sachin-Davis.jpg" },
-    { "name": "Vineeta Oommen", "role": "Toddlers Teacher", "photo": "/people/new_headshots/Vineeta-Oommen.jpg" },
-    { "name": "Reeja Kurian", "role": "Kindergarten Teacher", "photo": "/people/new_headshots/Reeja-Kurian.jpg" },
-    { "name": "Ancy George", "role": "Middler Teacher", "photo": "/people/new_headshots/Ancy-George.jpg" },
-    { "name": "Achu Oommen", "role": "Pre-teen Teacher", "photo": "/people/new_headshots/Achu-Oommen.jpg" },
-    { "name": "Johnson Mathai", "role": "Jr. High School Teacher", "photo": "/people/jm-ss_1.png?v=2" },
-    { "name": "James Oommen", "role": "Substitute Teacher", "photo": "/people/new_headshots/James-Oommen.jpg" }
+    {
+      "name": "Dr. Sachin Davis",
+      "role": "Principal, Sr. High School",
+      "photo": "/people/new_headshots/Dr.-Sachin-Davis.jpg"
+    },
+    {
+      "name": "Vineeta Oommen",
+      "role": "Toddlers Teacher",
+      "photo": "/people/new_headshots/Vineeta-Oommen.jpg"
+    },
+    {
+      "name": "Reeja Kurian",
+      "role": "Kindergarten Teacher",
+      "photo": "/people/new_headshots/Reeja-Kurian.jpg"
+    },
+    {
+      "name": "Ancy George",
+      "role": "Middler Teacher",
+      "photo": "/people/new_headshots/Ancy-George.jpg"
+    },
+    {
+      "name": "Achu Oommen",
+      "role": "Pre-teen Teacher",
+      "photo": "/people/new_headshots/Achu-Oommen.jpg"
+    },
+    {
+      "name": "Johnson Mathai",
+      "role": "Jr. High School Teacher",
+      "photo": "/people/jm-ss_1.png?v=2"
+    },
+    {
+      "name": "James Oommen",
+      "role": "Substitute Teacher",
+      "photo": "/people/new_headshots/James-Oommen.jpg"
+    }
   ]
 }
