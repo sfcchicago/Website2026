@@ -37,6 +37,7 @@ export default defineConfig({
             delete: false,
           },
           global: true,
+          router: () => "/",
         },
         match: {
           include: "settings",
@@ -66,6 +67,7 @@ export default defineConfig({
             create: false,
             delete: false,
           },
+          router: () => "/",
         },
         match: {
           include: "services",
@@ -98,6 +100,7 @@ export default defineConfig({
             create: false,
             delete: false,
           },
+          router: () => "/pastor",
         },
         match: {
           include: "pastor",
@@ -144,6 +147,7 @@ export default defineConfig({
             create: false,
             delete: false,
           },
+          router: () => "/",
         },
         match: {
           include: "mission",
@@ -164,6 +168,7 @@ export default defineConfig({
             create: false,
             delete: false,
           },
+          router: () => "/beliefs",
         },
         match: {
           include: "beliefs",
@@ -194,6 +199,7 @@ export default defineConfig({
             create: false,
             delete: false,
           },
+          router: () => "/leadership",
         },
         match: {
           include: "leadership",
@@ -322,6 +328,7 @@ export default defineConfig({
             create: false,
             delete: false,
           },
+          router: () => "/pastor",
         },
         match: {
           include: "pastorHistory",

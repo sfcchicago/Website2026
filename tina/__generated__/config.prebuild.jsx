@@ -26,7 +26,8 @@ var config_default = defineConfig({
             create: false,
             delete: false
           },
-          global: true
+          global: true,
+          router: () => "/"
         },
         match: {
           include: "settings"
@@ -55,7 +56,8 @@ var config_default = defineConfig({
           allowedActions: {
             create: false,
             delete: false
-          }
+          },
+          router: () => "/"
         },
         match: {
           include: "services"
@@ -87,7 +89,8 @@ var config_default = defineConfig({
           allowedActions: {
             create: false,
             delete: false
-          }
+          },
+          router: () => "/pastor"
         },
         match: {
           include: "pastor"
@@ -133,7 +136,8 @@ var config_default = defineConfig({
           allowedActions: {
             create: false,
             delete: false
-          }
+          },
+          router: () => "/"
         },
         match: {
           include: "mission"
@@ -153,7 +157,8 @@ var config_default = defineConfig({
           allowedActions: {
             create: false,
             delete: false
-          }
+          },
+          router: () => "/beliefs"
         },
         match: {
           include: "beliefs"
@@ -183,7 +188,8 @@ var config_default = defineConfig({
           allowedActions: {
             create: false,
             delete: false
-          }
+          },
+          router: () => "/leadership"
         },
         match: {
           include: "leadership"
@@ -311,7 +317,8 @@ var config_default = defineConfig({
           allowedActions: {
             create: false,
             delete: false
-          }
+          },
+          router: () => "/pastor"
         },
         match: {
           include: "pastorHistory"
