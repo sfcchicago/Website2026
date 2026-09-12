@@ -8,6 +8,7 @@ import Leadership from "./pages/LeadershipPage";
 import SundaySchool from "./pages/SundaySchoolPage";
 import Beliefs from "./pages/BeliefsPage";
 import Contact from "./pages/ContactPage";
+import Manager from "./pages/Manager";
 import { SiteProvider } from "./context/SiteContext";
 
 export default function App() {
@@ -25,6 +26,8 @@ export default function App() {
             <Route path="beliefs" element={<Beliefs />} />
             <Route path="contact" element={<Contact />} />
           </Route>
+          <Route path="manager" element={<Manager />} />
+          <Route path="edit" element={<Manager />} />
         </Routes>
       </BrowserRouter>
     </SiteProvider>
