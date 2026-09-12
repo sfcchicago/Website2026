@@ -57,6 +57,8 @@ collections:
           - { label: "Location", name: "location", widget: "string" }
           - { label: "Biography", name: "bio", widget: "list", field: { name: "paragraph", label: "Paragraph", widget: "text" } }
           - { label: "Photo", name: "photo", widget: "image", required: false }
+          - { label: "Photo Framing / Focus", name: "photoPosition", widget: "select", default: "center 20%", options: [{ label: "Face / Upper Center (Default)", value: "center 20%" }, { label: "Top (Head / Hair)", value: "center top" }, { label: "Dead Center", value: "center center" }, { label: "Lower / Body", value: "center bottom" }], required: false }
+          - { label: "Photo Zoom / Scale", name: "photoScale", widget: "select", default: "1.0", options: [{ label: "100% (Normal)", value: "1.0" }, { label: "110% (Slight Zoom)", value: "1.1" }, { label: "120% (Medium Zoom)", value: "1.2" }, { label: "135% (Close Up)", value: "1.35" }, { label: "90% (Fit Wider)", value: "0.9" }], required: false }
 
   - name: "about"
     label: "About & Beliefs"
@@ -89,6 +91,8 @@ collections:
               - { label: "Name", name: "name", widget: "string" }
               - { label: "Years Served", name: "years", widget: "string" }
               - { label: "Photo", name: "photo", widget: "image", required: false }
+              - { label: "Photo Framing / Focus", name: "photoPosition", widget: "select", default: "center 20%", options: [{ label: "Face / Upper Center (Default)", value: "center 20%" }, { label: "Top (Head / Hair)", value: "center top" }, { label: "Dead Center", value: "center center" }, { label: "Lower / Body", value: "center bottom" }], required: false }
+              - { label: "Photo Zoom / Scale", name: "photoScale", widget: "select", default: "1.0", options: [{ label: "100% (Normal)", value: "1.0" }, { label: "110% (Slight Zoom)", value: "1.1" }, { label: "120% (Medium Zoom)", value: "1.2" }, { label: "135% (Close Up)", value: "1.35" }, { label: "90% (Fit Wider)", value: "0.9" }], required: false }
 
   - name: "leadership"
     label: "Leadership & Teams"
@@ -104,6 +108,8 @@ collections:
               - { label: "Name", name: "name", widget: "string" }
               - { label: "Role", name: "role", widget: "string" }
               - { label: "Photo", name: "photo", widget: "image", required: false }
+              - { label: "Photo Framing / Focus", name: "photoPosition", widget: "select", default: "center 20%", options: [{ label: "Face / Upper Center (Default)", value: "center 20%" }, { label: "Top (Head / Hair)", value: "center top" }, { label: "Dead Center", value: "center center" }, { label: "Lower / Body", value: "center bottom" }], required: false }
+              - { label: "Photo Zoom / Scale", name: "photoScale", widget: "select", default: "1.0", options: [{ label: "100% (Normal)", value: "1.0" }, { label: "110% (Slight Zoom)", value: "1.1" }, { label: "120% (Medium Zoom)", value: "1.2" }, { label: "135% (Close Up)", value: "1.35" }, { label: "90% (Fit Wider)", value: "0.9" }], required: false }
           - label: "Ministerial Support"
             name: "ministerialSupport"
             widget: "list"
@@ -111,6 +117,8 @@ collections:
               - { label: "Name", name: "name", widget: "string" }
               - { label: "Role", name: "role", widget: "string" }
               - { label: "Photo", name: "photo", widget: "image", required: false }
+              - { label: "Photo Framing / Focus", name: "photoPosition", widget: "select", default: "center 20%", options: [{ label: "Face / Upper Center (Default)", value: "center 20%" }, { label: "Top (Head / Hair)", value: "center top" }, { label: "Dead Center", value: "center center" }, { label: "Lower / Body", value: "center bottom" }], required: false }
+              - { label: "Photo Zoom / Scale", name: "photoScale", widget: "select", default: "1.0", options: [{ label: "100% (Normal)", value: "1.0" }, { label: "110% (Slight Zoom)", value: "1.1" }, { label: "120% (Medium Zoom)", value: "1.2" }, { label: "135% (Close Up)", value: "1.35" }, { label: "90% (Fit Wider)", value: "0.9" }], required: false }
           - label: "Sunday School Staff"
             name: "sundaySchool"
             widget: "list"
@@ -118,3 +126,5 @@ collections:
               - { label: "Name", name: "name", widget: "string" }
               - { label: "Role", name: "role", widget: "string" }
               - { label: "Photo", name: "photo", widget: "image", required: false }
+              - { label: "Photo Framing / Focus", name: "photoPosition", widget: "select", default: "center 20%", options: [{ label: "Face / Upper Center (Default)", value: "center 20%" }, { label: "Top (Head / Hair)", value: "center top" }, { label: "Dead Center", value: "center center" }, { label: "Lower / Body", value: "center bottom" }], required: false }
+              - { label: "Photo Zoom / Scale", name: "photoScale", widget: "select", default: "1.0", options: [{ label: "100% (Normal)", value: "1.0" }, { label: "110% (Slight Zoom)", value: "1.1" }, { label: "120% (Medium Zoom)", value: "1.2" }, { label: "135% (Close Up)", value: "1.35" }, { label: "90% (Fit Wider)", value: "0.9" }], required: false }

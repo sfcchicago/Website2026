@@ -46,6 +46,10 @@ function TlAvatar({ person }) {
           onLoad={() => setIsLoaded(true)}
           onError={handleError}
           className={isLoaded ? "is-loaded" : "is-loading"}
+          style={{
+            "--photo-position": person.photoPosition || "center 20%",
+            "--photo-scale": person.photoScale ? String(person.photoScale) : "1",
+          }}
         />
       )}
     </div>
@@ -106,6 +110,10 @@ export default function Pastor() {
                       onLoad={() => setIsLoaded(true)}
                       onError={handleError}
                       className={isLoaded ? "is-loaded" : "is-loading"}
+                      style={{
+                        "--photo-position": pastor.photoPosition || "center 18%",
+                        "--photo-scale": pastor.photoScale ? String(pastor.photoScale) : "1",
+                      }}
                     />
                   )}
                   <div className="pastor-photo-tag">

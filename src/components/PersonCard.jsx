@@ -48,6 +48,10 @@ export default function PersonCard({ person }) {
             onLoad={() => setIsLoaded(true)}
             onError={handleError}
             className={isLoaded ? "is-loaded" : "is-loading"}
+            style={{
+              "--photo-position": person.photoPosition || "center 20%",
+              "--photo-scale": person.photoScale ? String(person.photoScale) : "1",
+            }}
           />
         )}
       </div>

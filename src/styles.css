@@ -1283,12 +1283,14 @@ em { font-style: italic; color: var(--accent-light); }
 }
 .pastor-photo img {
   position: relative; z-index: 1;
-  width: 100%; height: 100%; object-fit: cover; object-position: center 18%;
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: var(--photo-position, center 18%);
+  transform: scale(var(--photo-scale, 1));
   transition: transform 0.8s var(--ease), opacity 0.25s var(--ease);
 }
 .pastor-photo img.is-loading { opacity: 0; }
 .pastor-photo img.is-loaded { opacity: 1; }
-.pastor-photo:hover img { transform: scale(1.03); }
+.pastor-photo:hover img { transform: scale(calc(var(--photo-scale, 1) * 1.03)); }
 .pastor-photo-tag {
   position: absolute;
   bottom: 12px;
@@ -1561,15 +1563,16 @@ em { font-style: italic; color: var(--accent-light); }
   display: grid; place-items: center; position: absolute; inset: 0; z-index: 0; user-select: none;
 }
 .tl-avatar img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: var(--photo-position, center top);
+  transform: scale(var(--photo-scale, 1));
   position: relative; z-index: 1;
-  width: 100%; height: 100%; object-fit: cover; object-position: top center;
-  transform: scale(1.08);
-  transition: transform 0.6s var(--ease), opacity 0.25s var(--ease);
+  transition: transform 0.5s var(--ease), opacity 0.25s var(--ease);
 }
 .tl-avatar img.is-loading { opacity: 0; }
 .tl-avatar img.is-loaded { opacity: 1; }
 .tl-item:hover .tl-avatar { transform: translateY(-5px); box-shadow: 0 0 0 1px var(--line-hi), 0 16px 30px -10px rgba(0,0,0,0.6); }
-.tl-item:hover .tl-avatar img { transform: scale(1.16); }
+.tl-item:hover .tl-avatar img { transform: scale(calc(var(--photo-scale, 1) * 1.16)); }
 .tl-text { display: flex; flex-direction: column; align-items: center; margin-top: 14px; }
 .tl-years { font-size: 12px; font-weight: 600; letter-spacing: 0.05em; color: var(--accent-light); }
 .tl-name { font-size: 14px; font-weight: 600; color: var(--text-2); margin-top: 4px; line-height: 1.25; letter-spacing: -0.01em; }
@@ -1623,12 +1626,13 @@ em { font-style: italic; color: var(--accent-light); }
 .avatar img {
   position: relative; z-index: 1;
   width: 100%; height: 100%; object-fit: cover;
-  object-position: top center;
+  object-position: var(--photo-position, center 20%);
+  transform: scale(var(--photo-scale, 1));
   transition: transform 0.6s var(--ease), opacity 0.25s var(--ease);
 }
 .avatar img.is-loading { opacity: 0; }
 .avatar img.is-loaded { opacity: 1; }
-.person:hover .avatar img { transform: scale(1.06); }
+.person:hover .avatar img { transform: scale(calc(var(--photo-scale, 1) * 1.05)); }
 .person h4 { font-size: 16px; color: var(--text); margin-top: 10px; font-weight: 600; }
 .person p { font-size: 13.5px; color: var(--muted); margin-top: 3px; font-weight: 500; }
 /* ============================================================
