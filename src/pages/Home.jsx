@@ -19,14 +19,15 @@ const settingsInitial = {
 };
 
 export default function Home() {
-  const { setSettings } = useSiteSettings();
+  const { settings: liveSettings, setSettings } = useSiteSettings();
+  const initialData = liveSettings ? { ...settingsInitial, ...liveSettings } : settingsInitial;
   const { data } = useTina({
     query: SettingsDocument,
     variables: { relativePath: "settings.json" },
-    data: { settings: settingsInitial },
+    data: { settings: initialData },
   });
 
-  const activeSettings = data?.settings || initialSettings;
+  const activeSettings = data?.settings || liveSettings || initialSettings;
 
   useEffect(() => {
     if (data?.settings) {

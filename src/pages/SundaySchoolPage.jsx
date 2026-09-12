@@ -1,9 +1,13 @@
 import PageHeader from "../components/PageHeader";
 import { Reveal } from "../components/Reveal";
 import PersonCard from "../components/PersonCard";
-import { sundaySchool } from "../data";
+import { sundaySchool as defaultSundaySchool } from "../data";
+import { useSiteData } from "../context/SiteContext";
 
 export default function SundaySchool() {
+  const { leadership } = useSiteData();
+  const teachers = leadership?.sundaySchool || defaultSundaySchool;
+
   return (
     <>
       <PageHeader
@@ -36,7 +40,7 @@ export default function SundaySchool() {
 
           <Reveal delay={0.12}>
             <div className="people-grid">
-              {sundaySchool.map((p) => (
+              {teachers.map((p) => (
                 <PersonCard key={p.name} person={p} />
               ))}
             </div>

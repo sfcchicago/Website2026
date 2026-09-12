@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { Reveal } from "../components/Reveal";
 import initialBeliefs from "../content/beliefs.json";
-import { useTina } from "tinacms/dist/react";
+import { useTina, tinaField } from "tinacms/dist/react";
 import { BeliefsDocument } from "../../tina/__generated__/types";
 import { CaretDown, BookOpenText, CheckCircle, ArrowRight } from "@phosphor-icons/react";
+import { useSiteData } from "../context/SiteContext";
 
 const fullStatementTopics = [
   "Water Baptism",
@@ -29,14 +30,16 @@ const beliefsInitial = {
 };
 
 export default function Beliefs() {
+  const { beliefs: liveBeliefs } = useSiteData();
+  const initialData = liveBeliefs ? { ...beliefsInitial, items: liveBeliefs } : beliefsInitial;
   const { data } = useTina({
     query: BeliefsDocument,
     variables: { relativePath: "beliefs.json" },
-    data: { beliefs: beliefsInitial },
+    data: { beliefs: initialData },
   });
 
-  const beliefsData = data?.beliefs || initialBeliefs;
-  const beliefsList = beliefsData?.items || initialBeliefs.items || [];
+  const beliefsData = data?.beliefs || initialData;
+  const beliefsList = beliefsData?.items || liveBeliefs || initialBeliefs.items || [];
 
   // Allow multiple beliefs to be open independently
   const [openIndices, setOpenIndices] = useState(() => new Set());
@@ -73,14 +76,14 @@ export default function Beliefs() {
                   >
                     <button className="belief-q" onClick={() => toggleIndex(i)}>
                       <span className="belief-num">{String(i + 1).padStart(2, "0")}</span>
-                      <h3>{b.title}</h3>
+                      <h3 data-tina-field={tinaField(b, "title")}>{b.title}</h3>
                       <span className="belief-caret">
                         <CaretDown size={16} weight="bold" />
                       </span>
                     </button>
                     <div className="belief-body">
                       <div>
-                        <p>{b.body}</p>
+                        <p data-tina-field={tinaField(b, "body")}>{b.body}</p>
                       </div>
                     </div>
                   </div>

@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } fr
 import { ArrowRight, MapPin, Play } from "@phosphor-icons/react";
 import { church, mission, services } from "../data";
 import { preloadRoute, preloadImage } from "../utils/preload";
-import { useSiteSettings } from "../context/SiteContext";
+import { useSiteSettings, useSiteData } from "../context/SiteContext";
 import img1 from "../assets/DSC04618.JPG";
 import img2 from "../assets/DSC07464.JPG";
 import img3 from "../assets/DSC08784.JPG";
@@ -476,6 +476,9 @@ function Story() {
 }
 
 function Week() {
+  const { services: liveServices } = useSiteData();
+  const weekList = liveServices || week;
+
   return (
     <section>
       <div className="container">
@@ -489,7 +492,7 @@ function Week() {
 
         <Fade delay={0.08}>
           <div className="steps-list">
-            {week.map((s, i) => (
+            {weekList.map((s, i) => (
               <article className="step-row" key={s.name}>
                 <span className="step-n">{String(i + 1).padStart(2, "0")}</span>
                 <div className="step-body">

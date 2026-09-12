@@ -4,6 +4,7 @@ import PersonCard from "../components/PersonCard";
 import initialLeadership from "../content/leadership.json";
 import { useTina } from "tinacms/dist/react";
 import { LeadershipDocument } from "../../tina/__generated__/types";
+import { useSiteData } from "../context/SiteContext";
 
 const leadershipInitial = {
   ...initialLeadership,
@@ -19,13 +20,14 @@ const leadershipInitial = {
 };
 
 export default function Leadership() {
+  const { leadership: liveLeadership } = useSiteData();
   const { data } = useTina({
     query: LeadershipDocument,
     variables: { relativePath: "leadership.json" },
-    data: { leadership: leadershipInitial },
+    data: { leadership: liveLeadership || leadershipInitial },
   });
 
-  const leadership = data?.leadership || initialLeadership;
+  const leadership = data?.leadership || liveLeadership || initialLeadership;
   const board = leadership?.board || initialLeadership.board || [];
   const ministerialSupport = leadership?.ministerialSupport || initialLeadership.ministerialSupport || [];
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { isImageReady, preloadImage } from "../utils/preload";
 import { REMOTE_UP } from "../data";
+import { tinaField } from "tinacms/dist/react";
 
 export default function PersonCard({ person }) {
   const [imgErr, setImgErr] = useState(false);
@@ -37,7 +38,7 @@ export default function PersonCard({ person }) {
 
   return (
     <div className="person" data-person-name={person.name}>
-      <div className="avatar">
+      <div className="avatar" data-tina-field={tinaField(person, "photo")}>
         <span className="initials" aria-hidden="true">{initials}</span>
         {src && !imgErr && (
           <img
@@ -55,8 +56,8 @@ export default function PersonCard({ person }) {
           />
         )}
       </div>
-      <h4>{person.name}</h4>
-      {person.role && <p>{person.role}</p>}
+      <h4 data-tina-field={tinaField(person, "name")}>{person.name}</h4>
+      {person.role && <p data-tina-field={tinaField(person, "role")}>{person.role}</p>}
     </div>
   );
 }

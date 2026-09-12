@@ -1,9 +1,22 @@
 import { Link } from "react-router-dom";
 import { FacebookLogo, YoutubeLogo, InstagramLogo } from "@phosphor-icons/react";
 import { nav, church } from "../data";
+import { useSiteSettings } from "../context/SiteContext";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const { settings } = useSiteSettings();
+
+  const liveUrl = settings?.liveUrl || church.links.live;
+  const giveUrl = settings?.giveUrl || church.links.give;
+  const eventsUrl = settings?.eventsUrl || church.links.events;
+  const facebookUrl = settings?.facebookUrl || church.socials.facebook;
+  const youtubeUrl = settings?.youtubeUrl || church.socials.youtube;
+  const instagramUrl = settings?.instagramUrl || church.socials.instagram;
+  const address = settings?.address || church.address;
+  const phone = settings?.phone || church.phone;
+  const phoneHref = `tel:+1${phone.replace(/[^0-9]/g, "")}`;
+  const email = settings?.email || church.email;
 
   return (
     <footer>
@@ -15,16 +28,16 @@ export default function Footer() {
             </Link>
             <span className="footer-version">Since 1999</span>
             <p className="footer-desc">
-              A family of believers in Kenosha, Wisconsin. Malayalam and English worship every Sunday.
+              {settings?.tagline || "A family of believers in Kenosha, Wisconsin. Malayalam and English worship every Sunday."}
             </p>
             <div className="footer-social">
-              <a href={church.socials.facebook} target="_blank" rel="noreferrer" aria-label="Facebook">
+              <a href={facebookUrl} target="_blank" rel="noreferrer" aria-label="Facebook">
                 <FacebookLogo size={18} weight="fill" />
               </a>
-              <a href={church.socials.youtube} target="_blank" rel="noreferrer" aria-label="YouTube">
+              <a href={youtubeUrl} target="_blank" rel="noreferrer" aria-label="YouTube">
                 <YoutubeLogo size={18} weight="fill" />
               </a>
-              <a href={church.socials.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
+              <a href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram">
                 <InstagramLogo size={18} weight="fill" />
               </a>
             </div>
@@ -39,18 +52,17 @@ export default function Footer() {
 
           <div className="footer-col">
             <h4>Connect</h4>
-            <a href={church.links.events} target="_blank" rel="noreferrer">Events</a>
-            <a href={church.links.live} target="_blank" rel="noreferrer">Watch Live</a>
+            <a href={eventsUrl} target="_blank" rel="noreferrer">Events</a>
+            <a href={liveUrl} target="_blank" rel="noreferrer">Watch Live</a>
             <a href={church.links.zoomPrayer} target="_blank" rel="noreferrer">Prayer Line</a>
-            <a href={church.links.give} target="_blank" rel="noreferrer">Give</a>
+            <a href={giveUrl} target="_blank" rel="noreferrer">Give</a>
           </div>
 
           <div className="footer-col">
             <h4>Visit</h4>
-            <a href={church.maps} target="_blank" rel="noreferrer">5404 67th Street</a>
-            <a href={church.maps} target="_blank" rel="noreferrer">Kenosha, WI 53142</a>
-            <a href={church.phoneHref}>{church.phone}</a>
-            <a href={`mailto:${church.email}`}>{church.email}</a>
+            <a href={church.maps} target="_blank" rel="noreferrer">{address}</a>
+            <a href={phoneHref}>{phone}</a>
+            <a href={`mailto:${email}`}>{email}</a>
           </div>
         </div>
 
