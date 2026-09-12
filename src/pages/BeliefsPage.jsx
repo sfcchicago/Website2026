@@ -15,11 +15,24 @@ const fullStatementTopics = [
   "The New Heaven & New Earth",
 ];
 
+const beliefsInitial = {
+  ...initialBeliefs,
+  _sys: {
+    filename: "beliefs",
+    basename: "beliefs.json",
+    breadcrumbs: ["beliefs"],
+    path: "src/content/beliefs.json",
+    relativePath: "beliefs.json",
+    extension: "json",
+  },
+  id: "src/content/beliefs.json",
+};
+
 export default function Beliefs() {
   const { data } = useTina({
     query: BeliefsDocument,
     variables: { relativePath: "beliefs.json" },
-    data: { beliefs: initialBeliefs },
+    data: { beliefs: beliefsInitial },
   });
 
   const beliefsData = data?.beliefs || initialBeliefs;

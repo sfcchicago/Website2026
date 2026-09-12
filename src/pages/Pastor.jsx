@@ -58,11 +58,24 @@ function TlAvatar({ person }) {
   );
 }
 
+const pastorInitial = {
+  ...pastor,
+  _sys: {
+    filename: "pastor",
+    basename: "pastor.json",
+    breadcrumbs: ["pastor"],
+    path: "src/content/pastor.json",
+    relativePath: "pastor.json",
+    extension: "json",
+  },
+  id: "src/content/pastor.json",
+};
+
 export default function Pastor() {
   const { data } = useTina({
     query: PastorDocument,
     variables: { relativePath: "pastor.json" },
-    data: { pastor },
+    data: { pastor: pastorInitial },
   });
 
   const currentPastor = data?.pastor || pastor;
