@@ -121,9 +121,10 @@ function CyclingWord({ reduce }) {
 
 let persistentHeroIndex = 0;
 
-function Hero() {
+function Hero({ previewSettings }) {
   const reduce = useReducedMotion();
-  const { settings } = useSiteSettings();
+  const { settings: ctxSettings } = useSiteSettings();
+  const settings = previewSettings || ctxSettings;
   const liveUrl = settings?.liveUrl || church.links.live;
   const [currentIndex, setCurrentIndex] = useState(persistentHeroIndex);
   const [prevIndex, setPrevIndex] = useState(null);
@@ -357,10 +358,11 @@ function GlassChip({ children, as = "div", href, target, rel, className = "" }) 
   );
 }
 
-function Verse() {
+function Verse({ previewSettings }) {
   const ref = useRef(null);
   const reduce = useReducedMotion();
-  const { settings } = useSiteSettings();
+  const { settings: ctxSettings } = useSiteSettings();
+  const settings = previewSettings || ctxSettings;
   const verseText = settings?.verseText || church.verse.text;
   const verseRef = settings?.verseRef || church.verse.ref;
   const { scrollYProgress } = useScroll({
@@ -620,11 +622,11 @@ function CTA() {
   );
 }
 
-export default function Landing() {
+export default function Landing({ previewSettings }) {
   return (
     <div className="landing-page">
-      <Hero />
-      <Verse />
+      <Hero previewSettings={previewSettings} />
+      <Verse previewSettings={previewSettings} />
       <Story />
       <Week />
       <Directory />

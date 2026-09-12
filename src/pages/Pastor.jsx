@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PageHeader from "../components/PageHeader";
 import { Reveal, SectionHead } from "../components/Reveal";
 import { pastor, pastorHistory, REMOTE_UP } from "../data";
-import { useTina } from "tinacms/dist/react";
+import { useTina, tinaField } from "tinacms/dist/react";
 import { PastorDocument } from "../../tina/__generated__/types";
 import { isImageReady, preloadImage } from "../utils/preload";
 import { Church, CalendarBlank, MapPin, GraduationCap, Heart, Sparkle } from "@phosphor-icons/react";
@@ -113,7 +113,7 @@ export default function Pastor() {
                 className="pastor-photo-wrap"
                 data-person-name={currentPastor.name}
               >
-                <div className="pastor-photo">
+                <div className="pastor-photo" data-tina-field={tinaField(currentPastor, "photo")}>
                   <span className="pastor-placeholder" aria-hidden="true">{initials}</span>
                   {src && !imgErr && (
                     <img
@@ -144,7 +144,7 @@ export default function Pastor() {
                     <span className="aesthetic-dot" />
                     <span>A Heart for the Flock</span>
                   </div>
-                  <span className="aesthetic-year">{currentPastor.since}</span>
+                  <span className="aesthetic-year" data-tina-field={tinaField(currentPastor, "since")}>{currentPastor.since}</span>
                 </div>
 
                 <blockquote className="aesthetic-quote">
@@ -159,6 +159,7 @@ export default function Pastor() {
                       className="aesthetic-pill"
                       whileHover={{ y: -2, scale: 1.03 }}
                       transition={{ type: "spring", stiffness: 450, damping: 20 }}
+                      data-tina-field={tinaField(currentPastor, "location")}
                     >
                       <MapPin weight="duotone" /> {currentPastor.location}
                     </motion.span>
@@ -191,18 +192,18 @@ export default function Pastor() {
             <Reveal delay={0.12} className="pastor-bio-col">
               <div className="pastor-header-block">
                   <div className="pastor-badge-row">
-                    <span className="badge">
+                    <span className="badge" data-tina-field={tinaField(currentPastor, "role")}>
                       <span className="badge-dot" /> {currentPastor.role}
                     </span>
-                    <span className="badge-mono">{currentPastor.since}</span>
+                    <span className="badge-mono" data-tina-field={tinaField(currentPastor, "since")}>{currentPastor.since}</span>
                   </div>
-                  <h1 className="pastor-heading">{currentPastor.name}</h1>
-                  <p className="pastor-subhead">
+                  <h1 className="pastor-heading" data-tina-field={tinaField(currentPastor, "name")}>{currentPastor.name}</h1>
+                  <p className="pastor-subhead" data-tina-field={tinaField(currentPastor, "location")}>
                     Faithful shepherd of Sharon Fellowship Church &bull; {currentPastor.location}
                   </p>
                 </div>
 
-                <div className="pastor-bio-body">
+                <div className="pastor-bio-body" data-tina-field={tinaField(currentPastor, "bio")}>
                   <p className="pastor-lead">
                     <strong>{lead}</strong>
                   </p>
