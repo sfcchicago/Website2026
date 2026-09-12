@@ -69,8 +69,12 @@ export default defineConfig({
       '/admin': {
         target: 'http://localhost:4001',
         changeOrigin: true,
+        ws: true,
       },
     },
+  },
+  define: {
+    'process.env': {},
   },
 })
 

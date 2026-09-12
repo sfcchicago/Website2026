@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TinaCMS</title>
+    <script>
+      window.process = { env: {} };
+      window.__API_URL__ = "http://localhost:4001/graphql";
+      window.__BASE_PATH__ = "/admin/";
+      window.__TINA_GRAPHQL_VERSION__ = "2.4.11";
+    </script>
   </head>
 
   <!-- if development -->
