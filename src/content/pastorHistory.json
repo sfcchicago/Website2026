@@ -1,0 +1,10 @@
+{
+  "items": [
+    { "name": "Rev. P. C. Oommen", "years": "1999", "photo": "/people/pc-oommen_orig.png" },
+    { "name": "Rev. P. V. Kuruvilla", "years": "2000", "photo": "/people/pr-pv-kuruvilla_orig.png" },
+    { "name": "Rev. M. C. Mathew", "years": "2001 - 2002", "photo": "/people/mc-mathew_2_orig.jpeg" },
+    { "name": "Rev. John Thomas", "years": "2003 - 2005, 2012 - 2014", "photo": "/people/johnthomas-new_2_orig.jpg" },
+    { "name": "Rev. Jiju Oommen", "years": "2006 - 2011, 2015 - 2025", "photo": "/people/pr-jiju-oommen_orig.png" },
+    { "name": "Rev. M. G. Johnson", "years": "2025 - Present", "photo": "/people/mg-johnson_orig.png" }
+  ]
+}

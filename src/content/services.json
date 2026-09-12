@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "name": "Sunday Malayalam Service",
+      "day": "Sunday",
+      "time": "9:30 AM - 12:30 PM",
+      "note": "Join us for our main worship service in Malayalam, featuring worship, communion, and the Word of God."
+    },
+    {
+      "name": "Sunday English Service",
+      "day": "Sunday",
+      "time": "11:00 AM - 12:30 PM",
+      "note": "English worship service happening simultaneously in the adjacent hall."
+    },
+    {
+      "name": "Sunday School",
+      "day": "Sunday",
+      "time": "9:30 AM - 11:00 AM",
+      "note": "Classes for all age groups, learning the foundations of faith."
+    },
+    {
+      "name": "Fasting Prayer",
+      "day": "Friday",
+      "time": "10:00 AM - 12:30 PM",
+      "note": "A time of intercession, prayer, and seeking the Lord together."
+    }
+  ]
+}
