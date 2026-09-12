@@ -1,0 +1,94 @@
+fragment SettingsParts on Settings {
+  __typename
+  tagline
+  address
+  phone
+  email
+  liveUrl
+  giveUrl
+  eventsUrl
+  verseText
+  verseRef
+  facebookUrl
+  youtubeUrl
+  instagramUrl
+}
+
+fragment ServicesParts on Services {
+  __typename
+  items {
+    __typename
+    name
+    day
+    time
+    note
+  }
+}
+
+fragment PastorParts on Pastor {
+  __typename
+  name
+  role
+  since
+  location
+  bio
+  photo
+  photoPosition
+  photoScale
+}
+
+fragment AboutParts on About {
+  __typename
+  mission
+  vision
+  history
+}
+
+fragment BeliefsParts on Beliefs {
+  __typename
+  items {
+    __typename
+    title
+    body
+  }
+}
+
+fragment LeadershipParts on Leadership {
+  __typename
+  board {
+    __typename
+    name
+    role
+    photo
+    photoPosition
+    photoScale
+  }
+  ministerialSupport {
+    __typename
+    name
+    role
+    photo
+    photoPosition
+    photoScale
+  }
+  sundaySchool {
+    __typename
+    name
+    role
+    photo
+    photoPosition
+    photoScale
+  }
+}
+
+fragment PastorHistoryParts on PastorHistory {
+  __typename
+  items {
+    __typename
+    name
+    years
+    photo
+    photoPosition
+    photoScale
+  }
+}
