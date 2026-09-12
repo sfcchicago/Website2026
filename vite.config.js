@@ -64,5 +64,13 @@ function savePhotoAdjustmentsPlugin() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), savePhotoAdjustmentsPlugin()],
+  server: {
+    proxy: {
+      '/admin': {
+        target: 'http://localhost:4001',
+        changeOrigin: true,
+      },
+    },
+  },
 })
 
