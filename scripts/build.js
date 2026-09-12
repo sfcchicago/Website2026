@@ -10,7 +10,7 @@ if (hasTinaCloud) {
   console.log("Building TinaCMS with Tina Cloud credentials...");
   execSync("npx tinacms build", { stdio: "inherit" });
 } else {
-  console.log("Note: Tina Cloud credentials not detected in environment. Skipping cloud build step.");
+  console.log("Note: Tina Cloud credentials not detected in environment. Using pre-compiled TinaCMS admin bundle.");
 }
 
 console.log("Building Vite application...");
