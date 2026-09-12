@@ -50,7 +50,7 @@ function savePhotoAdjustmentsPlugin() {
           return
         }
         
-        // Serve Decap CMS for /admin
+        // Serve TinaCMS for /admin
         if (req.url === '/admin' || req.url === '/admin/') {
           req.url = '/admin/index.html'
         }
