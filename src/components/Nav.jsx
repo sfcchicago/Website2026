@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { Sun, Moon } from "@phosphor-icons/react";
 import { nav, church } from "../data";
 import { preloadRoute } from "../utils/preload";
@@ -9,15 +9,15 @@ import { useSiteSettings } from "../context/SiteContext";
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredPath, setHoveredPath] = useState(null);
   const [theme, setTheme] = useState(() => localStorage.getItem("sfc-theme") || "light");
   const loc = useLocation();
-  const [prevPath, setPrevPath] = useState(loc.pathname);
   const timerRef = useRef(null);
 
-  if (loc.pathname !== prevPath) {
-    setPrevPath(loc.pathname);
+  // Close mobile menu on route change
+  useEffect(() => {
     setOpen(false);
-  }
+  }, [loc.pathname]);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -39,9 +39,19 @@ export default function Nav() {
   };
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40);
-    fn(); window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 30);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -54,7 +64,12 @@ export default function Nav() {
 
   return (
     <>
-      <nav className={`nav${scrolled ? " scrolled" : ""}`}>
+      <motion.nav
+        className={`nav${scrolled ? " scrolled" : ""}`}
+        initial={{ y: -16, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div className="nav-inner">
           <Link
             className="nav-brand"
@@ -65,31 +80,49 @@ export default function Nav() {
             <img src={church.logo} alt="Sharon Fellowship Church" />
           </Link>
 
-          <div className="nav-links">
-            {nav.map((n) => (
-              <NavLink
-                key={n.href}
-                to={n.href}
-                onMouseEnter={() => preloadRoute(n.href)}
-                onTouchStart={() => preloadRoute(n.href)}
-                onFocus={() => preloadRoute(n.href)}
-                className={({ isActive }) => isActive ? "active" : ""}
-              >
-                {({ isActive }) => (
-                  <>
+          <LayoutGroup id="nav-pill">
+            <div className="nav-links" onMouseLeave={() => setHoveredPath(null)}>
+              {nav.map((n) => {
+                const isActive = loc.pathname === n.href;
+                const isHovered = hoveredPath === n.href;
+                return (
+                  <NavLink
+                    key={n.href}
+                    to={n.href}
+                    onMouseEnter={() => {
+                      setHoveredPath(n.href);
+                      preloadRoute(n.href);
+                    }}
+                    onTouchStart={() => preloadRoute(n.href)}
+                    onFocus={() => {
+                      setHoveredPath(n.href);
+                      preloadRoute(n.href);
+                    }}
+                    className={({ isActive: a }) => a ? "active" : ""}
+                  >
                     <span>{n.label}</span>
                     {isActive && (
                       <motion.span
                         className="nav-active-pill"
                         layoutId="activeNavPill"
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        transition={{ type: "spring", stiffness: 420, damping: 32 }}
                       />
                     )}
-                  </>
-                )}
-              </NavLink>
-            ))}
-          </div>
+                    {isHovered && !isActive && (
+                      <motion.span
+                        className="nav-hover-pill"
+                        layoutId="hoverNavPill"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                      />
+                    )}
+                  </NavLink>
+                );
+              })}
+            </div>
+          </LayoutGroup>
 
           <div className="nav-cta">
             <button
@@ -116,7 +149,7 @@ export default function Nav() {
             </button>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       <AnimatePresence>
         {open && (
@@ -128,7 +161,13 @@ export default function Nav() {
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="mobile-links">
-              <Link to="/" onTouchStart={() => preloadRoute("/")}>Home</Link>
+              <Link
+                to="/"
+                onClick={() => setOpen(false)}
+                onTouchStart={() => preloadRoute("/")}
+              >
+                Home
+              </Link>
               {nav.map((n, i) => (
                 <motion.div
                   key={n.href}
@@ -136,15 +175,31 @@ export default function Nav() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 + i * 0.04 }}
                 >
-                  <Link to={n.href} onTouchStart={() => preloadRoute(n.href)}>{n.label}</Link>
+                  <Link
+                    to={n.href}
+                    onClick={() => setOpen(false)}
+                    onTouchStart={() => preloadRoute(n.href)}
+                  >
+                    {n.label}
+                  </Link>
                 </motion.div>
               ))}
             </div>
             <div className="mobile-actions">
-              <a className="btn btn-secondary" href={liveUrl} target="_blank" rel="noreferrer">
+              <a
+                className="btn btn-secondary"
+                href={liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setOpen(false)}
+              >
                 Watch Live
               </a>
-              <Link className="btn btn-primary" to="/contact">
+              <Link
+                className="btn btn-primary"
+                to="/contact"
+                onClick={() => setOpen(false)}
+              >
                 Plan your visit
               </Link>
             </div>
