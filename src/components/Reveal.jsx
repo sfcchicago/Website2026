@@ -1,16 +1,16 @@
 import { motion, useReducedMotion } from "framer-motion";
 
-const ease = [0.22, 1, 0.36, 1];
+const ease = [0.16, 1, 0.3, 1];
 
-export function Reveal({ children, className = "", delay = 0, y = 18, x = 0 }) {
+export function Reveal({ children, className = "", delay = 0, y = 10, x = 0 }) {
   const reduce = useReducedMotion();
   return (
     <motion.div
       className={className}
       initial={reduce ? false : { opacity: 0, y, x }}
       whileInView={{ opacity: 1, y: 0, x: 0 }}
-      viewport={{ once: true, margin: "-48px" }}
-      transition={{ duration: 0.5, delay, ease }}
+      viewport={{ once: true, amount: 0.05 }}
+      transition={{ duration: 0.28, delay, ease }}
     >
       {children}
     </motion.div>

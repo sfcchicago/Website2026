@@ -14,10 +14,11 @@ export default function Nav() {
   const loc = useLocation();
   const timerRef = useRef(null);
 
-  // Close mobile menu on route change
-  useEffect(() => {
+  const [prevPath, setPrevPath] = useState(loc.pathname);
+  if (loc.pathname !== prevPath) {
+    setPrevPath(loc.pathname);
     setOpen(false);
-  }, [loc.pathname]);
+  }
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -64,12 +65,7 @@ export default function Nav() {
 
   return (
     <>
-      <motion.nav
-        className={`nav${scrolled ? " scrolled" : ""}`}
-        initial={{ y: -16, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      >
+      <nav className={`nav${scrolled ? " scrolled" : ""}`}>
         <div className="nav-inner">
           <Link
             className="nav-brand"
@@ -98,24 +94,22 @@ export default function Nav() {
                       setHoveredPath(n.href);
                       preloadRoute(n.href);
                     }}
+                    onBlur={() => setHoveredPath(null)}
                     className={({ isActive: a }) => a ? "active" : ""}
                   >
-                    <span>{n.label}</span>
+                    <span className="nav-link-text">{n.label}</span>
                     {isActive && (
                       <motion.span
                         className="nav-active-pill"
                         layoutId="activeNavPill"
-                        transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                        transition={{ type: "spring", stiffness: 450, damping: 28 }}
                       />
                     )}
                     {isHovered && !isActive && (
                       <motion.span
                         className="nav-hover-pill"
                         layoutId="hoverNavPill"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
                       />
                     )}
                   </NavLink>
@@ -136,7 +130,7 @@ export default function Nav() {
             <a className="btn btn-secondary btn-sm" href={liveUrl} target="_blank" rel="noreferrer">
               Watch Live
             </a>
-            <Link className="btn btn-primary btn-sm" to="/contact">
+            <Link className="btn btn-primary btn-sm" to="/contact" onMouseEnter={() => preloadRoute("/contact")}>
               Plan your visit
             </Link>
             <button
@@ -149,16 +143,16 @@ export default function Nav() {
             </button>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
       <AnimatePresence>
         {open && (
           <motion.div
             className="mobile-menu"
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="mobile-links">
               <Link
@@ -171,14 +165,15 @@ export default function Nav() {
               {nav.map((n, i) => (
                 <motion.div
                   key={n.href}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 + i * 0.04 }}
+                  transition={{ delay: 0.02 + i * 0.02, duration: 0.18 }}
                 >
                   <Link
                     to={n.href}
                     onClick={() => setOpen(false)}
                     onTouchStart={() => preloadRoute(n.href)}
+                    onMouseEnter={() => preloadRoute(n.href)}
                   >
                     {n.label}
                   </Link>
@@ -186,20 +181,10 @@ export default function Nav() {
               ))}
             </div>
             <div className="mobile-actions">
-              <a
-                className="btn btn-secondary"
-                href={liveUrl}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setOpen(false)}
-              >
+              <a className="btn btn-secondary" href={liveUrl} target="_blank" rel="noreferrer">
                 Watch Live
               </a>
-              <Link
-                className="btn btn-primary"
-                to="/contact"
-                onClick={() => setOpen(false)}
-              >
+              <Link className="btn btn-primary" to="/contact" onClick={() => setOpen(false)}>
                 Plan your visit
               </Link>
             </div>

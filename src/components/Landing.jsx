@@ -45,15 +45,15 @@ const faq = [
   { q: "How can I get connected mid-week?", a: "We have a prayer line every Tuesday, Thursday, and Saturday at 7:30 PM via Zoom, and young adults (RISE) meet the 4th Saturday at 7:00 PM. Check the Contact page for links." },
 ];
 
-function Fade({ children, className = "", delay = 0, y = 24 }) {
+function Fade({ children, className = "", delay = 0, y = 14 }) {
   const reduce = useReducedMotion();
   return (
     <motion.div
       className={className}
-      initial={reduce ? false : { opacity: 0, y, filter: "blur(4px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      initial={reduce ? false : { opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.05 }}
+      transition={{ duration: 0.28, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>
@@ -73,7 +73,7 @@ function CyclingWord({ reduce }) {
   const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    const boot = setTimeout(() => setStarted(true), 2200);
+    const boot = setTimeout(() => setStarted(true), 1200);
     return () => clearTimeout(boot);
   }, []);
 
@@ -81,7 +81,7 @@ function CyclingWord({ reduce }) {
     if (!started) return;
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % CYCLE_WORDS.length);
-    }, 3400);
+    }, 2800);
     return () => clearInterval(id);
   }, [started]);
 
@@ -102,12 +102,12 @@ function CyclingWord({ reduce }) {
         <motion.span
           key={currentWord}
           className="cycle-word-item"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -14 }}
+          exit={{ opacity: 0, y: -10 }}
           transition={{
-            opacity: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
-            y: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+            opacity: { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
+            y: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
           }}
         >
           <span className="cycle-word-text">{currentWord}</span>
@@ -146,9 +146,8 @@ function Hero({ previewSettings }) {
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  // Smooth fade out of photo background on initial scroll
+  // Smooth fade out of photo background on initial scroll without heavy scale invalidation
   const heroBgOpacity = useTransform(heroScroll, [0, 0.5], [1, 0]);
-  const heroBgScale = useTransform(heroScroll, [0, 0.6], [1, 1.05]);
   const heroContentOpacity = useTransform(heroScroll, [0, 0.4], [1, 0]);
   const heroContentY = useTransform(heroScroll, [0, 0.4], [0, -24]);
 
@@ -163,25 +162,8 @@ function Hero({ previewSettings }) {
       <motion.div
         className="hero-bg"
         aria-hidden="true"
-        style={
-          reduce
-            ? {}
-            : {
-                opacity: heroBgOpacity,
-                scale: heroBgScale,
-              }
-        }
+        style={reduce ? {} : { opacity: heroBgOpacity }}
       >
-        <img
-          src={HERO_IMAGES[0].src}
-          alt=""
-          loading="eager"
-          decoding="async"
-          className="hero-bg-layer hero-bg-static-fallback"
-          style={{
-            transform: `translate(-50%, -50%) translate(${HERO_IMAGES[0].posX - 50}%, ${HERO_IMAGES[0].posY - 50}%) scale(${HERO_IMAGES[0].scale})`,
-          }}
-        />
         {prevPhoto && (
           <img
             key={`prev-${prevIndex}`}
@@ -191,7 +173,7 @@ function Hero({ previewSettings }) {
             decoding="async"
             className="hero-bg-layer hero-bg-base"
             style={{
-              transform: `translate(-50%, -50%) translate(${prevPhoto.posX - 50}%, ${prevPhoto.posY - 50}%) scale(${prevPhoto.scale})`,
+              transform: `translate3d(-50%, -50%, 0) translate3d(${prevPhoto.posX - 50}%, ${prevPhoto.posY - 50}%, 0) scale(${prevPhoto.scale})`,
             }}
           />
         )}
@@ -203,22 +185,16 @@ function Hero({ previewSettings }) {
           decoding="async"
           className="hero-bg-layer hero-bg-active"
           style={{
-            transform: `translate(-50%, -50%) translate(${currentPhoto.posX - 50}%, ${currentPhoto.posY - 50}%) scale(${currentPhoto.scale})`,
+            transform: `translate3d(-50%, -50%, 0) translate3d(${currentPhoto.posX - 50}%, ${currentPhoto.posY - 50}%, 0) scale(${currentPhoto.scale})`,
           }}
           initial={{ opacity: prevIndex === null ? 1 : 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 2.2, ease: "easeInOut" }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
         />
         <div className="hero-bg-overlay" />
         <motion.div
           className="hero-scroll-darkness"
-          style={
-            reduce
-              ? {}
-              : {
-                  opacity: heroBottomDarkness,
-                }
-          }
+          style={reduce ? {} : { opacity: heroBottomDarkness }}
         />
       </motion.div>
       <div className="hero-glow" aria-hidden="true" />
@@ -228,9 +204,9 @@ function Hero({ previewSettings }) {
       >
         <motion.p
           className="badge hero-badge"
-          initial={reduce ? false : { opacity: 0, y: 8 }}
+          initial={reduce ? false : { opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease }}
+          transition={{ duration: 0.22, ease }}
         >
           <span className="badge-dot" />
           <span className="hero-badge-loc">Kenosha, WI</span>
@@ -241,17 +217,17 @@ function Hero({ previewSettings }) {
         <h1 className="hero-title">
           <motion.span
             className="hero-title-line"
-            initial={reduce ? false : { opacity: 0, y: 40, filter: "blur(12px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ delay: 0.1, duration: 0.8, ease }}
+            initial={reduce ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.04, duration: 0.28, ease }}
           >
             <CyclingWord reduce={reduce} />
           </motion.span>
           <motion.span
             className="hero-title-line"
-            initial={reduce ? false : { opacity: 0, y: 40, filter: "blur(12px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ delay: 0.2, duration: 0.8, ease }}
+            initial={reduce ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.08, duration: 0.28, ease }}
           >
             here
           </motion.span>
@@ -259,9 +235,9 @@ function Hero({ previewSettings }) {
 
         <motion.p
           className="hero-sub"
-          initial={reduce ? false : { opacity: 0, y: 10 }}
+          initial={reduce ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.42, duration: 0.5, ease }}
+          transition={{ delay: 0.12, duration: 0.25, ease }}
         >
           Malayalam and English worship every Sunday. Come as you are.
           There is a place at the table.
@@ -269,9 +245,9 @@ function Hero({ previewSettings }) {
 
         <motion.div
           className="hero-actions"
-          initial={reduce ? false : { opacity: 0, y: 10 }}
+          initial={reduce ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.52, duration: 0.5, ease }}
+          transition={{ delay: 0.16, duration: 0.25, ease }}
         >
           <Link className="btn btn-primary" to="/new-here">
             Plan your visit
@@ -286,16 +262,16 @@ function Hero({ previewSettings }) {
           className="hero-trust"
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.7, duration: 0.4 }}
+          transition={{ delay: 0.2, duration: 0.2 }}
         >
           Every Sunday · Malayalam 9:30 AM · English 11 AM · All welcome
         </motion.p>
 
         <motion.div
           className="hero-chips"
-          initial={reduce ? false : { opacity: 0, y: 16 }}
+          initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.64, duration: 0.55, ease }}
+          transition={{ delay: 0.24, duration: 0.28, ease }}
         >
           {sunday.map((s) => (
             <GlassChip key={s.name}>
@@ -427,12 +403,11 @@ function Verse({ previewSettings }) {
 function VerseWord({ i, total, progress, reduce, from = 0, span = 1, children }) {
   const start = from + (i / total) * span;
   const end = Math.min(1, from + ((i + 0.85) / total) * span);
-  const opacity = useTransform(progress, [start, end], [0.12, 1]);
-  const y = useTransform(progress, [start, end], [14, 0]);
-  const filter = useTransform(progress, [start, end], ["blur(3px)", "blur(0px)"]);
+  const opacity = useTransform(progress, [start, end], [0.15, 1]);
+  const y = useTransform(progress, [start, end], [8, 0]);
   if (reduce) return <span className="verse-word">{children} </span>;
   return (
-    <motion.span className="verse-word" style={{ opacity, y, filter }}>
+    <motion.span className="verse-word" style={{ opacity, y }}>
       {children}{" "}
     </motion.span>
   );

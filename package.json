@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "tinacms dev -c \"vite\"",
     "build": "node scripts/build.js",
-    "lint": "oxlint",
+    "lint": "oxlint src",
     "preview": "vite preview"
   },
   "dependencies": {

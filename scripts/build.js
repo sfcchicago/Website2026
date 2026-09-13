@@ -21,6 +21,9 @@ try {
 } catch (err) {
   console.warn("Note: Using pre-compiled TinaCMS admin bundle.");
 }
+if (fs.existsSync("public/admin/.gitignore")) {
+  fs.unlinkSync("public/admin/.gitignore");
+}
 
 // Ensure public/admin/index.html has the correct Tina Cloud production endpoint
 function patchAdminHtml(filePath) {

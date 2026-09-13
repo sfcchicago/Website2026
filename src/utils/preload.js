@@ -134,30 +134,35 @@ export function preloadAllSiteImages() {
   const curImages = ROUTE_IMAGES[curPath] || HERO_SOURCES;
   preloadImages(curImages);
 
-  // Background priority: preload all other pages photos right away
-  const backgroundBatch = [
-    // Hero images
-    ...HERO_SOURCES,
-    // Pastor
+  // Background priority: preload remaining hero images and other pages sequentially during idle time
+  const remainingHero = HERO_SOURCES.slice(2);
+  const otherPages = [
     pastor.photo,
-    // Board & coordinators
     ...board.map((p) => p.photo).filter(Boolean),
     ...ministerialSupport.map((p) => p.photo).filter(Boolean),
-    // Sunday school
     ...sundaySchool.map((p) => p.photo).filter(Boolean),
-    // Pastor history
     ...pastorHistory.map((p) => p.photo).filter(Boolean),
   ];
 
-  const schedulePreload = () => {
-    backgroundBatch.forEach((src) => {
-      preloadImage(src);
+  const queue = [...remainingHero, ...otherPages];
+
+  const processQueue = () => {
+    if (queue.length === 0) return;
+    const nextBatch = queue.splice(0, 2);
+    Promise.all(nextBatch.map(preloadImage)).then(() => {
+      if (queue.length > 0) {
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(processQueue, { timeout: 1500 });
+        } else {
+          setTimeout(processQueue, 200);
+        }
+      }
     });
   };
 
   if ("requestIdleCallback" in window) {
-    window.requestIdleCallback(schedulePreload, { timeout: 1000 });
+    window.requestIdleCallback(processQueue, { timeout: 2000 });
   } else {
-    setTimeout(schedulePreload, 100);
+    setTimeout(processQueue, 300);
   }
 }

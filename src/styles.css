@@ -595,6 +595,8 @@ em { font-style: italic; color: var(--accent-light); }
   bottom: -60px;
   z-index: -1;
   overflow: hidden;
+  contain: paint;
+  isolation: isolate;
 }
 .hero-bg-layer {
   position: absolute;
