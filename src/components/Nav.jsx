@@ -6,9 +6,6 @@ import { nav, church } from "../data";
 import { preloadRoute } from "../utils/preload";
 import { useSiteSettings } from "../context/SiteContext";
 
-const MotionLink = motion.create(Link);
-const MotionNavLink = motion.create(NavLink);
-
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -117,16 +114,15 @@ export default function Nav() {
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="nav-inner">
-          <MotionLink
+          <Link
             className="nav-brand"
             to="/"
-            whileTap={{ scale: 0.95 }}
             onClick={() => setHoveredPath(null)}
             onMouseEnter={() => preloadRoute("/")}
             onTouchStart={() => preloadRoute("/")}
           >
             <img src={church.logo} alt="Sharon Fellowship Church" />
-          </MotionLink>
+          </Link>
 
           <div
             ref={navLinksRef}
@@ -155,16 +151,12 @@ export default function Nav() {
               const isCurrentActive = activeHref === n.href;
               const isTarget = targetHref === n.href;
               return (
-                <MotionNavLink
+                <NavLink
                   key={n.href}
                   ref={(el) => {
                     if (el) linksRef.current[n.href] = el;
                   }}
                   to={n.href}
-                  whileTap={{ scale: 0.94 }}
-                  onClick={() => {
-                    setHoveredPath(n.href);
-                  }}
                   onMouseEnter={() => {
                     setHoveredPath(n.href);
                     preloadRoute(n.href);
@@ -180,39 +172,36 @@ export default function Nav() {
                   className={`nav-link ${isCurrentActive ? "active" : ""} ${isTarget ? "is-target" : ""}`}
                 >
                   <span className="nav-link-text">{n.label}</span>
-                </MotionNavLink>
+                </NavLink>
               );
             })}
           </div>
 
           <div className="nav-cta">
-            <motion.button
+            <button
               className="theme-toggle-btn"
               onClick={toggleTheme}
-              whileTap={{ scale: 0.90 }}
               aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
               title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
             >
               {theme === "light" ? <Moon size={18} weight="fill" /> : <Sun size={18} weight="fill" />}
-            </motion.button>
-            <motion.a
+            </button>
+            <a
               className="btn btn-secondary btn-sm"
               href={liveUrl}
               target="_blank"
               rel="noreferrer"
-              whileTap={{ scale: 0.96 }}
             >
               Watch Live
-            </motion.a>
-            <MotionLink
+            </a>
+            <Link
               className="btn btn-primary btn-sm"
               to="/contact"
-              whileTap={{ scale: 0.96 }}
               onClick={() => setHoveredPath("/contact")}
               onMouseEnter={() => preloadRoute("/contact")}
             >
               Plan your visit
-            </MotionLink>
+            </Link>
             <button
               className={`nav-burger${open ? " is-open" : ""}`}
               onClick={() => setOpen((v) => !v)}

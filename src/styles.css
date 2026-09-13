@@ -427,6 +427,12 @@ em { font-style: italic; color: var(--accent-light); }
   align-items: center;
   justify-self: start;
   flex-shrink: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s ease;
+}
+.nav-brand:active {
+  transform: scale(0.96);
 }
 .nav-brand img {
   height: 35px; width: auto; max-width: 165px;
@@ -464,12 +470,19 @@ em { font-style: italic; color: var(--accent-light); }
   position: relative; font-size: 14px; font-weight: 450;
   letter-spacing: -0.03em; color: var(--text-2);
   padding: 7px 15px; border-radius: var(--r-pill);
-  white-space: nowrap; transition: color 0.18s ease;
+  white-space: nowrap;
+  transition: color 0.18s ease, transform 0.1s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   z-index: 2;
   text-decoration: none;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-links a:active {
+  transform: scale(0.95);
 }
 .nav-links a:hover,
 .nav-links a.is-target {
