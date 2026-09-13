@@ -65,6 +65,14 @@ export default function Nav() {
 
   const currentPath = loc.pathname.replace(/\/+$/, "") || "/";
 
+  const resetScrollAndNav = () => {
+    setHoveredPath(null);
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { immediate: true });
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  };
+
   return (
     <>
       <motion.nav
@@ -77,6 +85,7 @@ export default function Nav() {
           <Link
             className="nav-brand"
             to="/"
+            onClick={resetScrollAndNav}
             onMouseEnter={() => preloadRoute("/")}
             onTouchStart={() => preloadRoute("/")}
           >
@@ -92,6 +101,7 @@ export default function Nav() {
                   <NavLink
                     key={n.href}
                     to={n.href}
+                    onClick={resetScrollAndNav}
                     onMouseEnter={() => {
                       setHoveredPath(n.href);
                       preloadRoute(n.href);
@@ -139,7 +149,12 @@ export default function Nav() {
             <a className="btn btn-secondary btn-sm" href={liveUrl} target="_blank" rel="noreferrer">
               Watch Live
             </a>
-            <Link className="btn btn-primary btn-sm" to="/contact" onMouseEnter={() => preloadRoute("/contact")}>
+            <Link
+              className="btn btn-primary btn-sm"
+              to="/contact"
+              onClick={resetScrollAndNav}
+              onMouseEnter={() => preloadRoute("/contact")}
+            >
               Plan your visit
             </Link>
             <button
@@ -166,7 +181,10 @@ export default function Nav() {
             <div className="mobile-links">
               <Link
                 to="/"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  resetScrollAndNav();
+                }}
                 onTouchStart={() => preloadRoute("/")}
               >
                 Home
@@ -180,7 +198,10 @@ export default function Nav() {
                 >
                   <Link
                     to={n.href}
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      setOpen(false);
+                      resetScrollAndNav();
+                    }}
                     onTouchStart={() => preloadRoute(n.href)}
                     onMouseEnter={() => preloadRoute(n.href)}
                   >
@@ -202,7 +223,10 @@ export default function Nav() {
               <Link
                 className="btn btn-primary"
                 to="/contact"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  resetScrollAndNav();
+                }}
               >
                 Plan your visit
               </Link>
