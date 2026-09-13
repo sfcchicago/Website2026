@@ -6,6 +6,9 @@ import { nav, church } from "../data";
 import { preloadRoute } from "../utils/preload";
 import { useSiteSettings } from "../context/SiteContext";
 
+const MotionLink = motion.create(Link);
+const MotionNavLink = motion.create(NavLink);
+
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -114,14 +117,16 @@ export default function Nav() {
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="nav-inner">
-          <Link
+          <MotionLink
             className="nav-brand"
             to="/"
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setHoveredPath(null)}
             onMouseEnter={() => preloadRoute("/")}
             onTouchStart={() => preloadRoute("/")}
           >
             <img src={church.logo} alt="Sharon Fellowship Church" />
-          </Link>
+          </MotionLink>
 
           <div
             ref={navLinksRef}
@@ -150,17 +155,24 @@ export default function Nav() {
               const isCurrentActive = activeHref === n.href;
               const isTarget = targetHref === n.href;
               return (
-                <NavLink
+                <MotionNavLink
                   key={n.href}
                   ref={(el) => {
                     if (el) linksRef.current[n.href] = el;
                   }}
                   to={n.href}
+                  whileTap={{ scale: 0.94 }}
+                  onClick={() => {
+                    setHoveredPath(n.href);
+                  }}
                   onMouseEnter={() => {
                     setHoveredPath(n.href);
                     preloadRoute(n.href);
                   }}
-                  onTouchStart={() => preloadRoute(n.href)}
+                  onTouchStart={() => {
+                    setHoveredPath(n.href);
+                    preloadRoute(n.href);
+                  }}
                   onFocus={() => {
                     setHoveredPath(n.href);
                     preloadRoute(n.href);
@@ -168,26 +180,39 @@ export default function Nav() {
                   className={`nav-link ${isCurrentActive ? "active" : ""} ${isTarget ? "is-target" : ""}`}
                 >
                   <span className="nav-link-text">{n.label}</span>
-                </NavLink>
+                </MotionNavLink>
               );
             })}
           </div>
 
           <div className="nav-cta">
-            <button
+            <motion.button
               className="theme-toggle-btn"
               onClick={toggleTheme}
+              whileTap={{ scale: 0.90 }}
               aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
               title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
             >
               {theme === "light" ? <Moon size={18} weight="fill" /> : <Sun size={18} weight="fill" />}
-            </button>
-            <a className="btn btn-secondary btn-sm" href={liveUrl} target="_blank" rel="noreferrer">
+            </motion.button>
+            <motion.a
+              className="btn btn-secondary btn-sm"
+              href={liveUrl}
+              target="_blank"
+              rel="noreferrer"
+              whileTap={{ scale: 0.96 }}
+            >
               Watch Live
-            </a>
-            <Link className="btn btn-primary btn-sm" to="/contact" onMouseEnter={() => preloadRoute("/contact")}>
+            </motion.a>
+            <MotionLink
+              className="btn btn-primary btn-sm"
+              to="/contact"
+              whileTap={{ scale: 0.96 }}
+              onClick={() => setHoveredPath("/contact")}
+              onMouseEnter={() => preloadRoute("/contact")}
+            >
               Plan your visit
-            </Link>
+            </MotionLink>
             <button
               className={`nav-burger${open ? " is-open" : ""}`}
               onClick={() => setOpen((v) => !v)}
@@ -210,22 +235,30 @@ export default function Nav() {
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="mobile-links">
-              <Link
-                to="/"
-                onClick={() => setOpen(false)}
-                onTouchStart={() => preloadRoute("/")}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.02, duration: 0.18 }}
               >
-                Home
-              </Link>
+                <Link
+                  to="/"
+                  className={currentPath === "/" ? "active" : ""}
+                  onClick={() => setOpen(false)}
+                  onTouchStart={() => preloadRoute("/")}
+                >
+                  Home
+                </Link>
+              </motion.div>
               {nav.map((n, i) => (
                 <motion.div
                   key={n.href}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.02 + i * 0.02, duration: 0.18 }}
+                  transition={{ delay: 0.04 + i * 0.02, duration: 0.18 }}
                 >
                   <Link
                     to={n.href}
+                    className={activeHref === n.href ? "active" : ""}
                     onClick={() => setOpen(false)}
                     onTouchStart={() => preloadRoute(n.href)}
                     onMouseEnter={() => preloadRoute(n.href)}
@@ -236,22 +269,34 @@ export default function Nav() {
               ))}
             </div>
             <div className="mobile-actions">
-              <a
-                className="btn btn-secondary"
-                href={liveUrl}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setOpen(false)}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18, duration: 0.18 }}
               >
-                Watch Live
-              </a>
-              <Link
-                className="btn btn-primary"
-                to="/contact"
-                onClick={() => setOpen(false)}
+                <a
+                  className="btn btn-secondary"
+                  href={liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setOpen(false)}
+                >
+                  Watch Live
+                </a>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.20, duration: 0.18 }}
               >
-                Plan your visit
-              </Link>
+                <Link
+                  className="btn btn-primary"
+                  to="/contact"
+                  onClick={() => setOpen(false)}
+                >
+                  Plan your visit
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
         )}

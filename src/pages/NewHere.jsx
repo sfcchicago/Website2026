@@ -35,18 +35,38 @@ export default function NewHere() {
         <div className="container">
           <div className="new-here-hero-grid">
             <div className="new-here-welcome-col">
-              <Reveal>
-                <span className="badge" style={{ marginBottom: 14 }}>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <motion.span
+                  className="badge"
+                  style={{ marginBottom: 14 }}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                >
                   <span className="badge-dot" /> I'm New Here
-                </span>
-                <h1 className="page-title new-here-title">
+                </motion.span>
+                <motion.h1
+                  className="page-title new-here-title"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.04, duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+                >
                   Welcome home.<br />
                   <em>We saved you a seat.</em>
-                </h1>
-                <p className="page-lead new-here-lead">
+                </motion.h1>
+                <motion.p
+                  className="page-lead new-here-lead"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.08, duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+                >
                   Whether you are exploring faith for the first time or looking for a church to call home, you belong here.
-                </p>
-              </Reveal>
+                </motion.p>
+              </motion.div>
             </div>
 
             <div className="new-here-story-col">
