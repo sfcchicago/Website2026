@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon } from "@phosphor-icons/react";
 import { nav, church } from "../data";
 import { preloadRoute } from "../utils/preload";
@@ -10,9 +10,12 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hoveredPath, setHoveredPath] = useState(null);
+  const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0, ready: false });
   const [theme, setTheme] = useState(() => localStorage.getItem("sfc-theme") || "light");
   const loc = useLocation();
   const timerRef = useRef(null);
+  const linksRef = useRef({});
+  const navLinksRef = useRef(null);
 
   const [prevPath, setPrevPath] = useState(loc.pathname);
   if (loc.pathname !== prevPath) {
@@ -60,12 +63,56 @@ export default function Nav() {
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
+  // Active route matching (handles trailing slashes and nested routes)
+  const currentPath = loc.pathname.replace(/\/+$/, "") || "/";
+  const activeNavItem = nav.find(
+    (n) => currentPath === n.href || currentPath.startsWith(n.href + "/")
+  );
+  const activeHref = activeNavItem ? activeNavItem.href : null;
+  const targetHref = hoveredPath || activeHref;
+
+  // Track and update the sliding pill position
+  useLayoutEffect(() => {
+    const updatePill = () => {
+      if (!targetHref || !navLinksRef.current) {
+        setIndicator((prev) => (prev.opacity === 0 ? prev : { ...prev, opacity: 0 }));
+        return;
+      }
+
+      const el = linksRef.current[targetHref];
+      if (el) {
+        setIndicator({
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+          opacity: 1,
+          ready: true,
+        });
+      } else {
+        setIndicator((prev) => (prev.opacity === 0 ? prev : { ...prev, opacity: 0 }));
+      }
+    };
+
+    updatePill();
+    const rafId = requestAnimationFrame(updatePill);
+    window.addEventListener("resize", updatePill);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", updatePill);
+    };
+  }, [targetHref, loc.pathname]);
+
   const { settings } = useSiteSettings();
   const liveUrl = settings?.liveUrl || church.links.live;
 
   return (
     <>
-      <nav className={`nav${scrolled ? " scrolled" : ""}`}>
+      <motion.nav
+        className={`nav${scrolled ? " scrolled" : ""}`}
+        initial={{ y: -16, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div className="nav-inner">
           <Link
             className="nav-brand"
@@ -76,47 +123,55 @@ export default function Nav() {
             <img src={church.logo} alt="Sharon Fellowship Church" />
           </Link>
 
-          <LayoutGroup id="nav-pill">
-            <div className="nav-links" onMouseLeave={() => setHoveredPath(null)}>
-              {nav.map((n) => {
-                const isActive = loc.pathname === n.href;
-                const isHovered = hoveredPath === n.href;
-                return (
-                  <NavLink
-                    key={n.href}
-                    to={n.href}
-                    onMouseEnter={() => {
-                      setHoveredPath(n.href);
-                      preloadRoute(n.href);
-                    }}
-                    onTouchStart={() => preloadRoute(n.href)}
-                    onFocus={() => {
-                      setHoveredPath(n.href);
-                      preloadRoute(n.href);
-                    }}
-                    onBlur={() => setHoveredPath(null)}
-                    className={({ isActive: a }) => a ? "active" : ""}
-                  >
-                    <span className="nav-link-text">{n.label}</span>
-                    {isActive && (
-                      <motion.span
-                        className="nav-active-pill"
-                        layoutId="activeNavPill"
-                        transition={{ type: "spring", stiffness: 450, damping: 28 }}
-                      />
-                    )}
-                    {isHovered && !isActive && (
-                      <motion.span
-                        className="nav-hover-pill"
-                        layoutId="hoverNavPill"
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
-                  </NavLink>
-                );
-              })}
-            </div>
-          </LayoutGroup>
+          <div
+            ref={navLinksRef}
+            className="nav-links"
+            onMouseLeave={() => setHoveredPath(null)}
+          >
+            {indicator.ready && (
+              <motion.span
+                className={`nav-active-pill ${targetHref === activeHref ? "is-active" : "is-hover"}`}
+                initial={false}
+                animate={{
+                  left: indicator.left,
+                  width: indicator.width,
+                  opacity: indicator.opacity,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 420,
+                  damping: 32,
+                  mass: 0.7,
+                }}
+              />
+            )}
+
+            {nav.map((n) => {
+              const isCurrentActive = activeHref === n.href;
+              const isTarget = targetHref === n.href;
+              return (
+                <NavLink
+                  key={n.href}
+                  ref={(el) => {
+                    if (el) linksRef.current[n.href] = el;
+                  }}
+                  to={n.href}
+                  onMouseEnter={() => {
+                    setHoveredPath(n.href);
+                    preloadRoute(n.href);
+                  }}
+                  onTouchStart={() => preloadRoute(n.href)}
+                  onFocus={() => {
+                    setHoveredPath(n.href);
+                    preloadRoute(n.href);
+                  }}
+                  className={`nav-link ${isCurrentActive ? "active" : ""} ${isTarget ? "is-target" : ""}`}
+                >
+                  <span className="nav-link-text">{n.label}</span>
+                </NavLink>
+              );
+            })}
+          </div>
 
           <div className="nav-cta">
             <button
@@ -143,7 +198,7 @@ export default function Nav() {
             </button>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       <AnimatePresence>
         {open && (
@@ -181,10 +236,20 @@ export default function Nav() {
               ))}
             </div>
             <div className="mobile-actions">
-              <a className="btn btn-secondary" href={liveUrl} target="_blank" rel="noreferrer">
+              <a
+                className="btn btn-secondary"
+                href={liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setOpen(false)}
+              >
                 Watch Live
               </a>
-              <Link className="btn btn-primary" to="/contact" onClick={() => setOpen(false)}>
+              <Link
+                className="btn btn-primary"
+                to="/contact"
+                onClick={() => setOpen(false)}
+              >
                 Plan your visit
               </Link>
             </div>
