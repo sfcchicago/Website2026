@@ -9,16 +9,20 @@ import { motion } from "framer-motion";
 
 function TlAvatar({ person }) {
   const [imgErr, setImgErr] = useState(false);
-  const [src, setSrc] = useState(person.photo);
-  const [isLoaded, setIsLoaded] = useState(() => isImageReady(person.photo));
+  const [src, setSrc] = useState(person?.photo || "");
+  const [isLoaded, setIsLoaded] = useState(() => isImageReady(person?.photo || ""));
 
   useEffect(() => {
-    if (person.photo && !isImageReady(person.photo)) {
+    setSrc(person?.photo || "");
+    setImgErr(false);
+    if (person?.photo && !isImageReady(person.photo)) {
       preloadImage(person.photo).then(() => setIsLoaded(true));
+    } else {
+      setIsLoaded(true);
     }
-  }, [person.photo]);
+  }, [person?.photo]);
 
-  const initials = person.name
+  const initials = (person?.name || "Pastor")
     .replace(/^Rev\.?\s*/i, "")
     .split(" ")
     .filter(Boolean)
@@ -41,15 +45,15 @@ function TlAvatar({ person }) {
       {src && !imgErr && (
         <img
           src={src}
-          alt={person.name}
+          alt={person?.name || "Pastor"}
           loading="lazy"
           decoding="async"
           onLoad={() => setIsLoaded(true)}
           onError={handleError}
           className={isLoaded ? "is-loaded" : "is-loading"}
           style={{
-            "--photo-position": person.photoPosition || "center 20%",
-            "--photo-scale": person.photoScale ? String(person.photoScale) : "1",
+            "--photo-position": person?.photoPosition || "center 20%",
+            "--photo-scale": person?.photoScale ? String(person.photoScale) : "1",
           }}
         />
       )}
@@ -62,31 +66,38 @@ export default function Pastor() {
   const currentPastor = sitePastor || defaultPastor;
   const historyList = siteHistory && siteHistory.length > 0 ? siteHistory : defaultPastorHistory;
 
-  const photoUrl = urlFor(currentPastor.photo) || currentPastor.photo;
+  const rawPhoto = currentPastor?.photo || defaultPastor?.photo || "/people/pastor.jpg";
+  const photoUrl = (urlFor && typeof rawPhoto === "object" ? urlFor(rawPhoto) : null) || (typeof rawPhoto === "string" ? rawPhoto : "") || "/people/pastor.jpg";
   const [src, setSrc] = useState(photoUrl);
   const [imgErr, setImgErr] = useState(false);
   const [isLoaded, setIsLoaded] = useState(() => isImageReady(photoUrl));
 
   useEffect(() => {
-    const nextPhoto = urlFor(currentPastor.photo) || currentPastor.photo;
+    const nextRaw = currentPastor?.photo || defaultPastor?.photo || "/people/pastor.jpg";
+    const nextPhoto = (urlFor && typeof nextRaw === "object" ? urlFor(nextRaw) : null) || (typeof nextRaw === "string" ? nextRaw : "") || "/people/pastor.jpg";
     setSrc(nextPhoto);
-  }, [currentPastor.photo, urlFor]);
+    setImgErr(false);
+  }, [currentPastor?.photo, urlFor]);
 
   useEffect(() => {
     if (src && !isImageReady(src)) {
       preloadImage(src).then(() => setIsLoaded(true));
+    } else {
+      setIsLoaded(true);
     }
   }, [src]);
 
   const handleError = () => {
     if (src && src.startsWith("/people") && REMOTE_UP) {
       setSrc(src.replace("/people", REMOTE_UP));
+    } else if (src !== "/people/pastor.jpg") {
+      setSrc("/people/pastor.jpg");
     } else {
       setImgErr(true);
     }
   };
 
-  const initials = (currentPastor.name || "Pastor")
+  const initials = (currentPastor?.name || "Pastor")
     .replace(/^Rev\.?\s*/i, "")
     .split(" ")
     .filter(Boolean)
@@ -95,8 +106,23 @@ export default function Pastor() {
     .slice(0, 2)
     .toUpperCase();
 
-  const bioArray = Array.isArray(currentPastor.bio) ? currentPastor.bio : [currentPastor.bio].filter(Boolean);
-  const [lead, ...rest] = bioArray.length > 0 ? bioArray : ["Born into a lifelong heritage of faith and ministry..."];
+  const rawBio = currentPastor?.bio && currentPastor.bio.length > 0 ? currentPastor.bio : defaultPastor.bio;
+  const bioArray = Array.isArray(rawBio)
+    ? rawBio
+    : typeof rawBio === "string"
+    ? rawBio.split(/\n\s*\n/).filter(Boolean)
+    : [rawBio].filter(Boolean);
+  const [lead = "Born into a lifelong heritage of faith and ministry...", ...rest] = bioArray.length > 0 ? bioArray : ["Born into a lifelong heritage of faith and ministry..."];
+
+  const defaultQuote = "To walk with this flock is a sacred calling—anchored in the Word, grounded in prayer, and devoted to seeing every generation flourish in Christ.";
+  const pillsList = currentPastor?.pills?.length
+    ? currentPastor.pills
+    : [
+        currentPastor?.location || "Chicago, Illinois",
+        "Mini & M. G. Johnson",
+        "M.Th • UBS & Gurukul Scholar",
+        "50-Yr Pastoral Heritage",
+      ];
 
   return (
     <>
@@ -108,95 +134,91 @@ export default function Pastor() {
       />
 
       <section className="pastor-section">
-        <div className="container" style={{ maxWidth: 1040 }}>
-          {/* 1. TITLE: Header block with role, since badge, name, subhead */}
+        <div className="container" style={{ maxWidth: 880 }}>
+          {/* 1. TITLE: Header block above image with role, since badge, name, subhead */}
           <Reveal>
             <div className="pastor-header-block">
               <div className="pastor-badge-row">
                 <span className="badge">
-                  <span className="badge-dot" /> {currentPastor.role}
+                  <span className="badge-dot" /> {currentPastor?.role || "Senior Pastor"}
                 </span>
-                <span className="badge-mono">{currentPastor.since}</span>
+                <span className="badge-mono">{currentPastor?.since || "Serving since 2025"}</span>
               </div>
-              <h1 className="pastor-heading">{currentPastor.name}</h1>
+              <h1 className="pastor-heading">{currentPastor?.name || "Rev. M. G. Johnson"}</h1>
               <p className="pastor-subhead">
-                Faithful shepherd of Sharon Fellowship Church &bull; {currentPastor.location}
+                Faithful shepherd of Sharon Fellowship Church &bull; {currentPastor?.location || "Chicago, Illinois"}
               </p>
             </div>
           </Reveal>
 
-          {/* 2. PHOTO & HIGHLIGHTS: In between the title and the text */}
-          <Reveal delay={0.08}>
-            <div className="pastor-showcase-row">
-              <div
-                className="pastor-photo-wrap"
-                data-person-name={currentPastor.name}
-              >
-                <div className="pastor-photo">
-                  <span className="pastor-placeholder" aria-hidden="true">{initials}</span>
-                  {src && !imgErr && (
-                    <img
-                      src={src}
-                      alt={`${currentPastor.name} and Sis. Mini Johnson`}
-                      loading="eager"
-                      decoding="async"
-                      onLoad={() => setIsLoaded(true)}
-                      onError={handleError}
-                      className={isLoaded ? "is-loaded" : "is-loading"}
-                      style={{
-                        "--photo-position": currentPastor.photoPosition || "center 18%",
-                        "--photo-scale": currentPastor.photoScale ? String(currentPastor.photoScale) : "1",
-                      }}
-                    />
-                  )}
-                  <div className="pastor-photo-tag">
-                    <span>{currentPastor.name} &amp; Sis. Mini Johnson</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pastor-aesthetic-card">
-                <div className="card-ambient-glow" aria-hidden="true" />
-
-                <div className="aesthetic-card-top">
-                  <div className="aesthetic-card-badge">
-                    <span className="aesthetic-dot" />
-                    <span>A Heart for the Flock</span>
-                  </div>
-                  <span className="aesthetic-year">{currentPastor.since}</span>
-                </div>
-
-                <blockquote className="aesthetic-quote">
-                  &ldquo;{currentPastor?.quote || "To walk with this flock is a sacred calling—anchored in the Word, grounded in prayer, and devoted to seeing every generation flourish in Christ."}&rdquo;
-                </blockquote>
-
-                <div className="aesthetic-card-bottom">
-                  <div className="aesthetic-divider" />
-
-                  <div className="aesthetic-pills-row">
-                    {(currentPastor?.pills || [
-                      currentPastor.location,
-                      "Mini & M. G. Johnson",
-                      "M.Th • UBS & Gurukul Scholar",
-                      "50-Yr Pastoral Heritage"
-                    ]).map((pill, i) => (
-                      <motion.span
-                        key={i}
-                        className="aesthetic-pill"
-                        whileHover={{ y: -2, scale: 1.03 }}
-                        transition={{ type: "spring", stiffness: 450, damping: 20 }}
-                      >
-                        {i === 0 ? <MapPin weight="duotone" /> : i === 1 ? <Heart weight="duotone" /> : i === 2 ? <GraduationCap weight="duotone" /> : <Church weight="duotone" />} {pill}
-                      </motion.span>
-                    ))}
-                  </div>
+          {/* 2. PHOTO: Landscape aspect ratio */}
+          <Reveal delay={0.06}>
+            <div
+              className="pastor-photo-wrap"
+              data-person-name={currentPastor?.name || "Rev. M. G. Johnson"}
+            >
+              <div className="pastor-photo pastor-photo-landscape">
+                <span className="pastor-placeholder" aria-hidden="true">{initials}</span>
+                {src && !imgErr && (
+                  <img
+                    src={src}
+                    alt={`${currentPastor?.name || "Rev. M. G. Johnson"} and Sis. Mini Johnson`}
+                    loading="eager"
+                    decoding="async"
+                    onLoad={() => setIsLoaded(true)}
+                    onError={handleError}
+                    className={isLoaded ? "is-loaded" : "is-loading"}
+                    style={{
+                      "--photo-position": currentPastor?.photoPosition || "center 22%",
+                      "--photo-scale": currentPastor?.photoScale ? String(currentPastor.photoScale) : "1",
+                    }}
+                  />
+                )}
+                <div className="pastor-photo-tag">
+                  <span>{currentPastor?.name || "Rev. M. G. Johnson"} &amp; Sis. Mini Johnson</span>
                 </div>
               </div>
             </div>
           </Reveal>
 
-          {/* 3. TEXT: Lead & Bio Paragraphs */}
-          <Reveal delay={0.12}>
+          {/* 3. GLASSMORPHIC CARD: Neatly sitting below the photo */}
+          <Reveal delay={0.1}>
+            <div className="pastor-aesthetic-card pastor-card-stacked">
+              <div className="card-ambient-glow" aria-hidden="true" />
+
+              <div className="aesthetic-card-top">
+                <div className="aesthetic-card-badge">
+                  <span className="aesthetic-dot" />
+                  <span>A Heart for the Flock</span>
+                </div>
+                <span className="aesthetic-year">{currentPastor?.since || "Serving since 2025"}</span>
+              </div>
+
+              <blockquote className="aesthetic-quote">
+                &ldquo;{currentPastor?.quote || defaultQuote}&rdquo;
+              </blockquote>
+
+              <div className="aesthetic-card-bottom">
+                <div className="aesthetic-divider" />
+
+                <div className="aesthetic-pills-row">
+                  {pillsList.map((pill, i) => (
+                    <motion.span
+                      key={pill || i}
+                      className="aesthetic-pill"
+                      whileHover={{ y: -2, scale: 1.03 }}
+                      transition={{ type: "spring", stiffness: 450, damping: 20 }}
+                    >
+                      {i === 0 ? <MapPin weight="duotone" /> : i === 1 ? <Heart weight="duotone" /> : i === 2 ? <GraduationCap weight="duotone" /> : <Church weight="duotone" />} {pill}
+                    </motion.span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* 4. TEXT: Bio lead & paragraphs below the glassmorphic card */}
+          <Reveal delay={0.14}>
             <div className="pastor-bio-body">
               <p className="pastor-lead">
                 <strong>{lead}</strong>
