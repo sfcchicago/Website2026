@@ -134,7 +134,7 @@ export default function Pastor() {
       />
 
       <section className="pastor-section">
-        <div className="container" style={{ maxWidth: 880 }}>
+        <div className="container pastor-page-container">
           {/* 1. TITLE: Header block above image with role, since badge, name, subhead */}
           <Reveal>
             <div className="pastor-header-block">
