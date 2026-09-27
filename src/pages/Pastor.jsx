@@ -86,6 +86,15 @@ export default function Pastor() {
     }
   };
 
+  const initials = (currentPastor.name || "Pastor")
+    .replace(/^Rev\.?\s*/i, "")
+    .split(" ")
+    .filter(Boolean)
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
   const bioArray = Array.isArray(currentPastor.bio) ? currentPastor.bio : [currentPastor.bio].filter(Boolean);
   const [lead, ...rest] = bioArray.length > 0 ? bioArray : ["Born into a lifelong heritage of faith and ministry..."];
 
@@ -98,34 +107,51 @@ export default function Pastor() {
         className="pastor-header"
       />
 
-      <section>
-        <div className="container">
-          <div className="pastor-grid">
-            <Reveal className="pastor-photo-col">
-              <div className="pastor-photo-frame">
-                <div className="photo-corner photo-corner-tl" />
-                <div className="photo-corner photo-corner-br" />
-                <div className="photo-ambient" aria-hidden="true" />
+      <section className="pastor-section">
+        <div className="container" style={{ maxWidth: 1040 }}>
+          {/* 1. TITLE: Header block with role, since badge, name, subhead */}
+          <Reveal>
+            <div className="pastor-header-block">
+              <div className="pastor-badge-row">
+                <span className="badge">
+                  <span className="badge-dot" /> {currentPastor.role}
+                </span>
+                <span className="badge-mono">{currentPastor.since}</span>
+              </div>
+              <h1 className="pastor-heading">{currentPastor.name}</h1>
+              <p className="pastor-subhead">
+                Faithful shepherd of Sharon Fellowship Church &bull; {currentPastor.location}
+              </p>
+            </div>
+          </Reveal>
 
-                <div className="pastor-photo-img-wrap">
-                  {!isLoaded && !imgErr && (
-                    <div className="pastor-photo-shimmer" aria-hidden="true" />
-                  )}
-                  {src && !imgErr ? (
+          {/* 2. PHOTO & HIGHLIGHTS: In between the title and the text */}
+          <Reveal delay={0.08}>
+            <div className="pastor-showcase-row">
+              <div
+                className="pastor-photo-wrap"
+                data-person-name={currentPastor.name}
+              >
+                <div className="pastor-photo">
+                  <span className="pastor-placeholder" aria-hidden="true">{initials}</span>
+                  {src && !imgErr && (
                     <img
                       src={src}
-                      alt={currentPastor.name}
+                      alt={`${currentPastor.name} and Sis. Mini Johnson`}
                       loading="eager"
                       decoding="async"
                       onLoad={() => setIsLoaded(true)}
                       onError={handleError}
                       className={isLoaded ? "is-loaded" : "is-loading"}
+                      style={{
+                        "--photo-position": currentPastor.photoPosition || "center 18%",
+                        "--photo-scale": currentPastor.photoScale ? String(currentPastor.photoScale) : "1",
+                      }}
                     />
-                  ) : (
-                    <div className="pastor-photo-fallback">
-                      <Church size={64} weight="duotone" />
-                    </div>
                   )}
+                  <div className="pastor-photo-tag">
+                    <span>{currentPastor.name} &amp; Sis. Mini Johnson</span>
+                  </div>
                 </div>
               </div>
 
@@ -166,32 +192,20 @@ export default function Pastor() {
                   </div>
                 </div>
               </div>
-            </Reveal>
+            </div>
+          </Reveal>
 
-            <Reveal delay={0.12} className="pastor-bio-col">
-              <div className="pastor-header-block">
-                <div className="pastor-badge-row">
-                  <span className="badge">
-                    <span className="badge-dot" /> {currentPastor.role}
-                  </span>
-                  <span className="badge-mono">{currentPastor.since}</span>
-                </div>
-                <h1 className="pastor-heading">{currentPastor.name}</h1>
-                <p className="pastor-subhead">
-                  Faithful shepherd of Sharon Fellowship Church &bull; {currentPastor.location}
-                </p>
-              </div>
-
-              <div className="pastor-bio-body">
-                <p className="pastor-lead">
-                  <strong>{lead}</strong>
-                </p>
-                {rest.map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
-              </div>
-            </Reveal>
-          </div>
+          {/* 3. TEXT: Lead & Bio Paragraphs */}
+          <Reveal delay={0.12}>
+            <div className="pastor-bio-body">
+              <p className="pastor-lead">
+                <strong>{lead}</strong>
+              </p>
+              {rest.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
