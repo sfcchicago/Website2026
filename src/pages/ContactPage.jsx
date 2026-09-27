@@ -31,7 +31,7 @@ export default function Contact() {
             <div>
               <Reveal>
                 <div className="contact-list">
-                  <a className="contact-row" href={church.maps} target="_blank" rel="noreferrer">
+                  <a className="contact-row" href={settings?.mapsUrl || church.maps} target="_blank" rel="noreferrer">
                     <span className="contact-icon"><MapPin size={22} weight="bold" /></span>
                     <div>
                       <h4>Visit</h4>
@@ -52,7 +52,7 @@ export default function Contact() {
                       <p>{email}</p>
                     </div>
                   </a>
-                  <a className="contact-row" href={church.links.zoomPrayer} target="_blank" rel="noreferrer">
+                  <a className="contact-row" href={settings?.zoomPrayer || church.links.zoomPrayer} target="_blank" rel="noreferrer">
                     <span className="contact-icon"><Headset size={22} weight="bold" /></span>
                     <div>
                       <h4>Prayer Line</h4>

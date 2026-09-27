@@ -26,7 +26,6 @@ const HERO_IMAGES = [
 ];
 
 const ease = [0.22, 1, 0.36, 1];
-const sunday = services.filter((s) => s.day === "Sunday");
 const week = services;
 const directory = [
   { to: "/new-here", n: "01", label: "I'm New Here", desc: "What Sunday feels like, from the parking lot to the last song." },
@@ -60,7 +59,7 @@ function Fade({ children, className = "", delay = 0, y = 14 }) {
   );
 }
 
-const CYCLE_WORDS = [
+const DEFAULT_CYCLE_WORDS = [
   "Belong",
   "Matter",
   "Are Seen",
@@ -68,7 +67,8 @@ const CYCLE_WORDS = [
   "Are Loved",
 ];
 
-function CyclingWord({ reduce }) {
+function CyclingWord({ words, reduce }) {
+  const activeWords = words && words.length > 0 ? words : DEFAULT_CYCLE_WORDS;
   const [index, setIndex] = useState(0);
   const [started, setStarted] = useState(false);
 
@@ -80,12 +80,12 @@ function CyclingWord({ reduce }) {
   useEffect(() => {
     if (!started) return;
     const id = setInterval(() => {
-      setIndex((i) => (i + 1) % CYCLE_WORDS.length);
+      setIndex((i) => (i + 1) % activeWords.length);
     }, 2800);
     return () => clearInterval(id);
-  }, [started]);
+  }, [started, activeWords.length]);
 
-  const currentWord = CYCLE_WORDS[index];
+  const currentWord = activeWords[index % activeWords.length] || activeWords[0];
 
   if (reduce) {
     return (
@@ -124,10 +124,13 @@ let persistentHeroIndex = 0;
 function Hero({ previewSettings }) {
   const reduce = useReducedMotion();
   const { settings: ctxSettings } = useSiteSettings();
+  const { homeContent, services: allServices } = useSiteData();
   const settings = previewSettings || ctxSettings;
   const liveUrl = settings?.liveUrl || church.links.live;
   const [currentIndex, setCurrentIndex] = useState(persistentHeroIndex);
   const [prevIndex, setPrevIndex] = useState(null);
+
+  const sundayServices = (allServices && allServices.length > 0 ? allServices : services).filter((s) => s.day === "Sunday");
 
   useEffect(() => {
     persistentHeroIndex = currentIndex;
@@ -209,9 +212,7 @@ function Hero({ previewSettings }) {
           transition={{ duration: 0.22, ease }}
         >
           <span className="badge-dot" />
-          <span className="hero-badge-loc">Kenosha, WI</span>
-          <span className="hero-badge-sep" aria-hidden="true">·</span>
-          <span className="hero-badge-sub">Since 1999</span>
+          <span className="hero-badge-sub">{homeContent?.heroBadge || "Kenosha, WI · Since 1999"}</span>
         </motion.p>
 
         <h1 className="hero-title">
@@ -221,7 +222,7 @@ function Hero({ previewSettings }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.04, duration: 0.28, ease }}
           >
-            <CyclingWord reduce={reduce} />
+            <CyclingWord words={homeContent?.cycleWords} reduce={reduce} />
           </motion.span>
           <motion.span
             className="hero-title-line"
@@ -239,8 +240,7 @@ function Hero({ previewSettings }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12, duration: 0.25, ease }}
         >
-          Malayalam and English worship every Sunday. Come as you are.
-          There is a place at the table.
+          {homeContent?.heroSubtitle || "Malayalam and English worship every Sunday. Come as you are. There is a place at the table."}
         </motion.p>
 
         <motion.div
@@ -264,7 +264,7 @@ function Hero({ previewSettings }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.2 }}
         >
-          Every Sunday · Malayalam 9:30 AM · English 11 AM · All welcome
+          {homeContent?.heroTrust || "Every Sunday · Malayalam 9:30 AM · English 11 AM · All welcome"}
         </motion.p>
 
         <motion.div
@@ -273,18 +273,18 @@ function Hero({ previewSettings }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.24, duration: 0.28, ease }}
         >
-          {sunday.map((s) => (
+          {sundayServices.slice(0, 3).map((s) => (
             <GlassChip key={s.name}>
               <span className="hero-chip-time">{s.time}</span>
               <span className="hero-chip-name">{s.name}</span>
             </GlassChip>
           ))}
-          <GlassChip as="a" href={church.maps} target="_blank" rel="noreferrer" className="hero-chip-map">
+          <GlassChip as="a" href={settings?.mapsUrl || church.maps} target="_blank" rel="noreferrer" className="hero-chip-map">
             <span className="hero-chip-time hero-chip-loc-header">
               <MapPin size={13} weight="bold" />
               <span>Location</span>
             </span>
-            <span className="hero-chip-name">5404 67th St</span>
+            <span className="hero-chip-name">{settings?.address?.split(",")[0] || "5404 67th St"}</span>
           </GlassChip>
         </motion.div>
       </motion.div>
@@ -341,6 +341,8 @@ function Verse({ previewSettings }) {
   const settings = previewSettings || ctxSettings;
   const verseText = settings?.verseText || church.verse.text;
   const verseRef = settings?.verseRef || church.verse.ref;
+  const verseMl = settings?.verseMl || church.verse.ml;
+  const verseMlRef = settings?.verseMlRef || church.verse.mlRef;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 0.85", "center 0.35"],
@@ -348,14 +350,14 @@ function Verse({ previewSettings }) {
 
   const line = useTransform(scrollYProgress, [0.1, 0.95], [0, 1]);
   const en = verseText.split(" ");
-  const ml = church.verse.ml.split(" ");
+  const ml = verseMl.split(" ");
 
   return (
     <section className="verse-section" ref={ref}>
       <div className="container">
         <div className="verse-refs">
           <p className="verse-ref">{verseRef}</p>
-          <p className="verse-ref" lang="ml">{church.verse.mlRef}</p>
+          <p className="verse-ref" lang="ml">{verseMlRef}</p>
         </div>
         <div className="verse-grid">
           <p className="verse-text">
@@ -414,6 +416,14 @@ function VerseWord({ i, total, progress, reduce, from = 0, span = 1, children })
 }
 
 function Story() {
+  const { about, homeContent } = useSiteData();
+  const statsList = homeContent?.stats?.length ? homeContent.stats : [
+    { number: "1999", label: "First gathering" },
+    { number: "100+", label: "Members & growing" },
+    { number: "22+", label: "Years in Kenosha" },
+    { number: "2", label: "Languages each Sunday" },
+  ];
+
   return (
     <section>
       <div className="container">
@@ -421,28 +431,18 @@ function Story() {
           <div className="section-head center">
             <span className="badge"><span className="badge-dot" /> Our story</span>
             <h2 className="section-title">Devoted to God,<br /><em>and to one another.</em></h2>
-            <p className="section-subtitle">{mission.mission}</p>
+            <p className="section-subtitle">{about?.mission || mission.mission}</p>
           </div>
         </Fade>
 
         <Fade delay={0.1}>
           <div className="stats-row">
-            <div className="stat-card">
-              <strong className="stat-num">1999</strong>
-              <span className="stat-label">First gathering</span>
-            </div>
-            <div className="stat-card">
-              <strong className="stat-num">100+</strong>
-              <span className="stat-label">Members & growing</span>
-            </div>
-            <div className="stat-card">
-              <strong className="stat-num">22+</strong>
-              <span className="stat-label">Years in Kenosha</span>
-            </div>
-            <div className="stat-card">
-              <strong className="stat-num">2</strong>
-              <span className="stat-label">Languages each Sunday</span>
-            </div>
+            {statsList.map((stat, i) => (
+              <div className="stat-card" key={i}>
+                <strong className="stat-num">{stat.number}</strong>
+                <span className="stat-label">{stat.label}</span>
+              </div>
+            ))}
           </div>
         </Fade>
       </div>
@@ -524,6 +524,8 @@ function Directory() {
 }
 
 function FAQ() {
+  const { homeContent } = useSiteData();
+  const faqList = homeContent?.faqs?.length ? homeContent.faqs : faq;
   const [openIndex, setOpenIndex] = useState(-1);
 
   return (
@@ -539,7 +541,7 @@ function FAQ() {
 
         <Fade delay={0.08}>
           <div className="faq-list">
-            {faq.map((item, i) => (
+            {faqList.map((item, i) => (
               <div key={i} className={`faq-item${openIndex === i ? " is-open" : ""}`}>
                 <button className="faq-q" onClick={() => setOpenIndex(openIndex === i ? -1 : i)}>
                   <span>{item.q}</span>

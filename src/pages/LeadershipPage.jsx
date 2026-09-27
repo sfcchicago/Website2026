@@ -2,33 +2,15 @@ import PageHeader from "../components/PageHeader";
 import { Reveal } from "../components/Reveal";
 import PersonCard from "../components/PersonCard";
 import initialLeadership from "../content/leadership.json";
-import { useTina } from "tinacms/dist/react";
-import { LeadershipDocument } from "../../tina/__generated__/types";
-
-const leadershipInitial = {
-  __typename: "Leadership",
-  ...initialLeadership,
-  _sys: {
-    filename: "leadership",
-    basename: "leadership.json",
-    breadcrumbs: ["leadership"],
-    path: "src/content/leadership.json",
-    relativePath: "leadership.json",
-    extension: "json",
-  },
-  id: "src/content/leadership.json",
-};
+import { useSiteData } from "../context/SiteContext";
 
 export default function Leadership() {
-  const { data } = useTina({
-    query: LeadershipDocument,
-    variables: { relativePath: "leadership.json" },
-    data: { leadership: leadershipInitial },
-  });
-
-  const leadership = data?.leadership || initialLeadership;
-  const board = leadership?.board || initialLeadership.board || [];
-  const ministerialSupport = leadership?.ministerialSupport || initialLeadership.ministerialSupport || [];
+  const { leadership } = useSiteData();
+  const currentLeadership = leadership || initialLeadership;
+  const board = currentLeadership?.board?.length ? currentLeadership.board : initialLeadership.board;
+  const ministerialSupport = currentLeadership?.ministerialSupport?.length
+    ? currentLeadership.ministerialSupport
+    : initialLeadership.ministerialSupport;
 
   return (
     <>

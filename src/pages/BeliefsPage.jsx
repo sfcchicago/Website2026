@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { Reveal } from "../components/Reveal";
 import initialBeliefs from "../content/beliefs.json";
-import { useTina, tinaField } from "tinacms/dist/react";
-import { BeliefsDocument } from "../../tina/__generated__/types";
+import { useSiteData } from "../context/SiteContext";
 import { CaretDown, BookOpenText, CheckCircle, ArrowRight } from "@phosphor-icons/react";
 
 const fullStatementTopics = [
@@ -15,29 +14,9 @@ const fullStatementTopics = [
   "The New Heaven & New Earth",
 ];
 
-const beliefsInitial = {
-  __typename: "Beliefs",
-  ...initialBeliefs,
-  _sys: {
-    filename: "beliefs",
-    basename: "beliefs.json",
-    breadcrumbs: ["beliefs"],
-    path: "src/content/beliefs.json",
-    relativePath: "beliefs.json",
-    extension: "json",
-  },
-  id: "src/content/beliefs.json",
-};
-
 export default function Beliefs() {
-  const { data } = useTina({
-    query: BeliefsDocument,
-    variables: { relativePath: "beliefs.json" },
-    data: { beliefs: beliefsInitial },
-  });
-
-  const beliefsData = data?.beliefs || initialBeliefs;
-  const beliefsList = beliefsData?.items || initialBeliefs.items || [];
+  const { beliefs } = useSiteData();
+  const beliefsList = beliefs?.length ? beliefs : initialBeliefs.items;
 
   // Allow multiple beliefs to be open independently
   const [openIndices, setOpenIndices] = useState(() => new Set());
@@ -74,14 +53,14 @@ export default function Beliefs() {
                   >
                     <button className="belief-q" onClick={() => toggleIndex(i)}>
                       <span className="belief-num">{String(i + 1).padStart(2, "0")}</span>
-                      <h3 data-tina-field={tinaField(b, "title")}>{b.title}</h3>
+                      <h3>{b.title}</h3>
                       <span className="belief-caret">
                         <CaretDown size={16} weight="bold" />
                       </span>
                     </button>
                     <div className="belief-body">
                       <div>
-                        <p data-tina-field={tinaField(b, "body")}>{b.body}</p>
+                        <p>{b.body}</p>
                       </div>
                     </div>
                   </div>
@@ -134,4 +113,3 @@ export default function Beliefs() {
     </>
   );
 }
-

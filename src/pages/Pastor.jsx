@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import PageHeader from "../components/PageHeader";
 import { Reveal, SectionHead } from "../components/Reveal";
-import { pastor, pastorHistory, REMOTE_UP } from "../data";
-import { useTina, tinaField } from "tinacms/dist/react";
-import { PastorDocument } from "../../tina/__generated__/types";
+import { pastor as defaultPastor, pastorHistory as defaultPastorHistory, REMOTE_UP } from "../data";
+import { useSiteData } from "../context/SiteContext";
 import { isImageReady, preloadImage } from "../utils/preload";
-import { Church, CalendarBlank, MapPin, GraduationCap, Heart, Sparkle } from "@phosphor-icons/react";
+import { Church, MapPin, GraduationCap, Heart } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 
 function TlAvatar({ person }) {
@@ -58,35 +57,20 @@ function TlAvatar({ person }) {
   );
 }
 
-const pastorInitial = {
-  __typename: "Pastor",
-  ...pastor,
-  _sys: {
-    filename: "pastor",
-    basename: "pastor.json",
-    breadcrumbs: ["pastor"],
-    path: "src/content/pastor.json",
-    relativePath: "pastor.json",
-    extension: "json",
-  },
-  id: "src/content/pastor.json",
-};
-
 export default function Pastor() {
-  const { data } = useTina({
-    query: PastorDocument,
-    variables: { relativePath: "pastor.json" },
-    data: { pastor: pastorInitial },
-  });
+  const { pastor: sitePastor, pastorHistory: siteHistory, urlFor } = useSiteData();
+  const currentPastor = sitePastor || defaultPastor;
+  const historyList = siteHistory && siteHistory.length > 0 ? siteHistory : defaultPastorHistory;
 
-  const currentPastor = data?.pastor || pastor;
-  const [src, setSrc] = useState(currentPastor.photo);
+  const photoUrl = urlFor(currentPastor.photo) || currentPastor.photo;
+  const [src, setSrc] = useState(photoUrl);
   const [imgErr, setImgErr] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(() => isImageReady(currentPastor.photo));
+  const [isLoaded, setIsLoaded] = useState(() => isImageReady(photoUrl));
 
   useEffect(() => {
-    setSrc(currentPastor.photo);
-  }, [currentPastor.photo]);
+    const nextPhoto = urlFor(currentPastor.photo) || currentPastor.photo;
+    setSrc(nextPhoto);
+  }, [currentPastor.photo, urlFor]);
 
   useEffect(() => {
     if (src && !isImageReady(src)) {
@@ -102,51 +86,46 @@ export default function Pastor() {
     }
   };
 
-  const initials = (currentPastor.name || "Pastor")
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2);
-
-  const bioList = Array.isArray(currentPastor.bio) ? currentPastor.bio : [currentPastor.bio || ""];
-  const [lead = "", ...rest] = bioList;
+  const bioArray = Array.isArray(currentPastor.bio) ? currentPastor.bio : [currentPastor.bio].filter(Boolean);
+  const [lead, ...rest] = bioArray.length > 0 ? bioArray : ["Born into a lifelong heritage of faith and ministry..."];
 
   return (
     <>
       <PageHeader
-        eyebrow="Leadership"
-        title="Our Pastor"
-        lead="Meet the heart and leadership behind Sharon Fellowship Church."
+        eyebrow="Our Pastor"
+        title="Shepherd of this house."
+        lead="A faithful servant called to preach the uncompromised Word of God, love the flock, and build the body of Christ."
+        className="pastor-header"
       />
 
-      <section className="pastor-section">
+      <section>
         <div className="container">
-          <div className="pastor-profile-grid">
-            <Reveal delay={0.08} className="pastor-media-col">
-              <div
-                className="pastor-photo-wrap"
-                data-person-name={currentPastor.name}
-              >
-                <div className="pastor-photo" data-tina-field={tinaField(currentPastor, "photo")}>
-                  <span className="pastor-placeholder" aria-hidden="true">{initials}</span>
-                  {src && !imgErr && (
+          <div className="pastor-grid">
+            <Reveal className="pastor-photo-col">
+              <div className="pastor-photo-frame">
+                <div className="photo-corner photo-corner-tl" />
+                <div className="photo-corner photo-corner-br" />
+                <div className="photo-ambient" aria-hidden="true" />
+
+                <div className="pastor-photo-img-wrap">
+                  {!isLoaded && !imgErr && (
+                    <div className="pastor-photo-shimmer" aria-hidden="true" />
+                  )}
+                  {src && !imgErr ? (
                     <img
                       src={src}
-                      alt={`${currentPastor.name} and Sis. Mini Johnson`}
+                      alt={currentPastor.name}
                       loading="eager"
                       decoding="async"
                       onLoad={() => setIsLoaded(true)}
                       onError={handleError}
                       className={isLoaded ? "is-loaded" : "is-loading"}
-                      style={{
-                        "--photo-position": currentPastor.photoPosition || "center 18%",
-                        "--photo-scale": currentPastor.photoScale ? String(currentPastor.photoScale) : "1",
-                      }}
                     />
+                  ) : (
+                    <div className="pastor-photo-fallback">
+                      <Church size={64} weight="duotone" />
+                    </div>
                   )}
-                  <div className="pastor-photo-tag">
-                    <span>{currentPastor.name} &amp; Sis. Mini Johnson</span>
-                  </div>
                 </div>
               </div>
 
@@ -158,7 +137,7 @@ export default function Pastor() {
                     <span className="aesthetic-dot" />
                     <span>A Heart for the Flock</span>
                   </div>
-                  <span className="aesthetic-year" data-tina-field={tinaField(currentPastor, "since")}>{currentPastor.since}</span>
+                  <span className="aesthetic-year">{currentPastor.since}</span>
                 </div>
 
                 <blockquote className="aesthetic-quote">
@@ -173,7 +152,6 @@ export default function Pastor() {
                       className="aesthetic-pill"
                       whileHover={{ y: -2, scale: 1.03 }}
                       transition={{ type: "spring", stiffness: 450, damping: 20 }}
-                      data-tina-field={tinaField(currentPastor, "location")}
                     >
                       <MapPin weight="duotone" /> {currentPastor.location}
                     </motion.span>
@@ -205,26 +183,26 @@ export default function Pastor() {
 
             <Reveal delay={0.12} className="pastor-bio-col">
               <div className="pastor-header-block">
-                  <div className="pastor-badge-row">
-                    <span className="badge" data-tina-field={tinaField(currentPastor, "role")}>
-                      <span className="badge-dot" /> {currentPastor.role}
-                    </span>
-                    <span className="badge-mono" data-tina-field={tinaField(currentPastor, "since")}>{currentPastor.since}</span>
-                  </div>
-                  <h1 className="pastor-heading" data-tina-field={tinaField(currentPastor, "name")}>{currentPastor.name}</h1>
-                  <p className="pastor-subhead" data-tina-field={tinaField(currentPastor, "location")}>
-                    Faithful shepherd of Sharon Fellowship Church &bull; {currentPastor.location}
-                  </p>
+                <div className="pastor-badge-row">
+                  <span className="badge">
+                    <span className="badge-dot" /> {currentPastor.role}
+                  </span>
+                  <span className="badge-mono">{currentPastor.since}</span>
                 </div>
+                <h1 className="pastor-heading">{currentPastor.name}</h1>
+                <p className="pastor-subhead">
+                  Faithful shepherd of Sharon Fellowship Church &bull; {currentPastor.location}
+                </p>
+              </div>
 
-                <div className="pastor-bio-body" data-tina-field={tinaField(currentPastor, "bio")}>
-                  <p className="pastor-lead">
-                    <strong>{lead}</strong>
-                  </p>
-                  {rest.map((p, i) => (
-                    <p key={i}>{p}</p>
-                  ))}
-                </div>
+              <div className="pastor-bio-body">
+                <p className="pastor-lead">
+                  <strong>{lead}</strong>
+                </p>
+                {rest.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
             </Reveal>
           </div>
         </div>
@@ -243,16 +221,16 @@ export default function Pastor() {
 
           <Reveal delay={0.1}>
             <div className="history-timeline">
-              {pastorHistory.map((p) => (
+              {historyList.map((p) => (
                 <div
-                  className={`tl-item${p.years.includes("Present") ? " is-current" : ""}`}
+                  className={`tl-item${p.years && p.years.includes("Present") ? " is-current" : ""}`}
                   key={p.name}
                 >
                   <TlAvatar person={p} />
                   <div className="tl-text">
                     <span className="tl-years">{p.years}</span>
                     <span className="tl-name">{p.name}</span>
-                    {p.years.includes("Present") && <span className="tl-now">Present</span>}
+                    {p.years && p.years.includes("Present") && <span className="tl-now">Present</span>}
                   </div>
                 </div>
               ))}

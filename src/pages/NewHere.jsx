@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Reveal } from "../components/Reveal";
-import { mission } from "../data";
+import { mission as defaultMission } from "../data";
+import { useSiteData } from "../context/SiteContext";
 import { House, Church, GlobeHemisphereWest, Lightning, HandHeart, Heart } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 
-
-const journeySteps = [
+const DEFAULT_JOURNEY_STEPS = [
   {
     year: "1999",
     title: "A humble beginning",
@@ -27,7 +27,24 @@ const journeySteps = [
 ];
 
 export default function NewHere() {
+  const { about, homeContent } = useSiteData();
   const [activeYear, setActiveYear] = useState(0);
+
+  const missionData = about || defaultMission;
+  const rawJourney = about?.journey && about.journey.length > 0 ? about.journey : DEFAULT_JOURNEY_STEPS;
+  const journeySteps = rawJourney.map((j, idx) => ({
+    year: j.year,
+    title: j.title || (idx === 0 ? "A humble beginning" : idx === 1 ? "A place to call home" : "A growing family"),
+    text: j.text,
+    icon: idx === 0 ? House : idx === 1 ? Church : GlobeHemisphereWest,
+  }));
+
+  const stats = homeContent?.stats?.length ? homeContent.stats : [
+    { number: "1999", label: "Founded in Illinois" },
+    { number: "100+", label: "Members & growing" },
+    { number: "22", label: "Years in Kenosha" },
+    { number: "2", label: "Languages each Sunday" },
+  ];
 
   return (
     <div className="new-here-page">
@@ -80,8 +97,8 @@ export default function NewHere() {
                     <em>to a family of believers.</em>
                   </h2>
                   <div className="story-body new-here-story-body">
-                    <p style={{ marginBottom: 14 }}>{mission.mission}</p>
-                    <p>{mission.history}</p>
+                    <p style={{ marginBottom: 14 }}>{missionData.mission}</p>
+                    <p>{missionData.history}</p>
                   </div>
                 </div>
               </Reveal>
@@ -94,22 +111,12 @@ export default function NewHere() {
         <div className="container" style={{ maxWidth: 1100 }}>
           <Reveal>
             <div className="aesthetic-stats">
-              <div className="a-stat-col">
-                <span className="a-stat-value">1999</span>
-                <span className="a-stat-text">Founded in Illinois</span>
-              </div>
-              <div className="a-stat-col">
-                <span className="a-stat-value">100<span style={{ color: "var(--accent)"}}>+</span></span>
-                <span className="a-stat-text">Members & growing</span>
-              </div>
-              <div className="a-stat-col">
-                <span className="a-stat-value">22</span>
-                <span className="a-stat-text">Years in Kenosha</span>
-              </div>
-              <div className="a-stat-col">
-                <span className="a-stat-value">2</span>
-                <span className="a-stat-text">Languages each Sunday</span>
-              </div>
+              {stats.map((s, idx) => (
+                <div className="a-stat-col" key={idx}>
+                  <span className="a-stat-value">{s.number}</span>
+                  <span className="a-stat-text">{s.label}</span>
+                </div>
+              ))}
             </div>
           </Reveal>
         </div>
@@ -209,7 +216,7 @@ export default function NewHere() {
             </div>
             
             <div className="vision-right">
-              {mission.vision.map((v, i) => {
+              {(missionData.vision || []).map((v, i) => {
                 const icons = [
                   <Lightning key="lightning" weight="duotone" size={26} />,
                   <GlobeHemisphereWest key="globe" weight="duotone" size={26} />,

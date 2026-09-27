@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
 import { isImageReady, preloadImage } from "../utils/preload";
 import { REMOTE_UP } from "../data";
-import { tinaField } from "tinacms/dist/react";
+import { urlFor } from "../sanity/client";
 
 export default function PersonCard({ person }) {
   const [imgErr, setImgErr] = useState(false);
-  const [prevPhoto, setPrevPhoto] = useState(person.photo);
-  const [src, setSrc] = useState(person.photo);
-  const [isLoaded, setIsLoaded] = useState(() => isImageReady(person.photo));
+  const photoUrl = (person.photo && typeof person.photo === "object") ? urlFor(person.photo) : person.photo;
+  const [prevPhoto, setPrevPhoto] = useState(photoUrl);
+  const [src, setSrc] = useState(photoUrl);
+  const [isLoaded, setIsLoaded] = useState(() => isImageReady(photoUrl));
 
-  if (person.photo !== prevPhoto) {
-    setPrevPhoto(person.photo);
-    setSrc(person.photo);
+  if (photoUrl !== prevPhoto) {
+    setPrevPhoto(photoUrl);
+    setSrc(photoUrl);
     setImgErr(false);
-    setIsLoaded(isImageReady(person.photo));
+    setIsLoaded(isImageReady(photoUrl));
   }
 
   useEffect(() => {
@@ -22,8 +23,9 @@ export default function PersonCard({ person }) {
     }
   }, [src]);
 
-  const initials = person.name
+  const initials = (person.name || "")
     .split(" ")
+    .filter(Boolean)
     .map((w) => w[0])
     .join("")
     .slice(0, 2);
@@ -38,7 +40,7 @@ export default function PersonCard({ person }) {
 
   return (
     <div className="person" data-person-name={person.name}>
-      <div className="avatar" data-tina-field={tinaField(person, "photo")}>
+      <div className="avatar">
         <span className="initials" aria-hidden="true">{initials}</span>
         {src && !imgErr && (
           <img
@@ -56,8 +58,8 @@ export default function PersonCard({ person }) {
           />
         )}
       </div>
-      <h4 data-tina-field={tinaField(person, "name")}>{person.name}</h4>
-      {person.role && <p data-tina-field={tinaField(person, "role")}>{person.role}</p>}
+      <h4>{person.name}</h4>
+      {person.role && <p>{person.role}</p>}
     </div>
   );
 }

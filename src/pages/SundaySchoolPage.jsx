@@ -5,8 +5,8 @@ import { sundaySchool as defaultSundaySchool } from "../data";
 import { useSiteData } from "../context/SiteContext";
 
 export default function SundaySchool() {
-  const { leadership } = useSiteData();
-  const teachers = leadership?.sundaySchool || defaultSundaySchool;
+  const { sundaySchool, leadership } = useSiteData();
+  const teachers = sundaySchool?.length ? sundaySchool : (leadership?.sundaySchool || defaultSundaySchool);
 
   return (
     <>
