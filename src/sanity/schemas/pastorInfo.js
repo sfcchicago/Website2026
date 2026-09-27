@@ -3,20 +3,34 @@ export default {
   title: "Pastor & Pastoral History",
   type: "document",
   fields: [
+    { name: "headerEyebrow", title: "Page Header Eyebrow", type: "string", description: "e.g. Our Pastor" },
+    { name: "headerTitle", title: "Page Header Title", type: "string", description: "e.g. Shepherd of this house." },
+    { name: "headerLead", title: "Page Header Lead Paragraph", type: "text", rows: 2 },
     { name: "name", title: "Pastor Name", type: "string" },
     { name: "role", title: "Role / Title", type: "string" },
     { name: "since", title: "Serving Since Line", type: "string" },
     { name: "location", title: "Location", type: "string" },
     { name: "photo", title: "Pastor Photo Path or URL", type: "string" },
+    { name: "quote", title: "Featured Quote Block", type: "text", rows: 3 },
+    {
+      name: "pills",
+      title: "Featured Highlight Pills",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Pills shown under the photo (e.g. Chicago, Illinois, Mini & M. G. Johnson, M.Th Scholar, 50-Yr Pastoral Heritage)",
+    },
     {
       name: "bio",
       title: "Biography Paragraphs",
       type: "array",
       of: [{ type: "text", rows: 3 }],
     },
+    { name: "historyEyebrow", title: "Pastoral History Eyebrow", type: "string", description: "e.g. Our History" },
+    { name: "historyTitle", title: "Pastoral History Title", type: "string", description: "e.g. Shepherds who have led us well" },
+    { name: "historyLead", title: "Pastoral History Lead", type: "text", rows: 2 },
     {
       name: "pastorsHistory",
-      title: "Former Pastors History",
+      title: "Former Pastors Timeline History",
       type: "array",
       of: [
         {
@@ -29,5 +43,7 @@ export default {
         },
       ],
     },
+    { name: "pastoralVerseText", title: "Pastoral Scripture Quote", type: "text", rows: 2 },
+    { name: "pastoralVerseRef", title: "Pastoral Scripture Reference", type: "string" },
   ],
 };

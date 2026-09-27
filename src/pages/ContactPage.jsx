@@ -17,12 +17,19 @@ export default function Contact() {
   const youtubeUrl = settings?.youtubeUrl || church.socials.youtube;
   const instagramUrl = settings?.instagramUrl || church.socials.instagram;
 
+  const headerEyebrow = settings?.contactHeaderEyebrow || "Contact";
+  const headerTitle = settings?.contactHeaderTitle || "Say hello, or just show up.";
+  const headerLead = settings?.contactHeaderLead || "Questions about services, membership, or how to get connected? We would love to hear from you.";
+  const prayerLineNote = settings?.prayerLineNote || "Tue, Thu, Sat at 7:30 PM · Join on Zoom";
+  const inviteTitle = settings?.inviteCardTitle || "There is a seat saved for you.";
+  const inviteLead = settings?.inviteCardLead || "Whether you are exploring faith for the first time or looking for a church to call home, you belong here. Come as you are this Sunday.";
+
   return (
     <>
       <PageHeader
-        eyebrow="Contact"
-        title="Say hello, or just show up."
-        lead="Questions about services, membership, or how to get connected? We would love to hear from you."
+        eyebrow={headerEyebrow}
+        title={headerTitle}
+        lead={headerLead}
       />
 
       <section>
@@ -52,11 +59,11 @@ export default function Contact() {
                       <p>{email}</p>
                     </div>
                   </a>
-                  <a className="contact-row" href={settings?.zoomPrayer || church.links.zoomPrayer} target="_blank" rel="noreferrer">
+                  <a className="contact-row" href={settings?.zoomPrayer || settings?.zoomPrayerUrl || church.links.zoomPrayer} target="_blank" rel="noreferrer">
                     <span className="contact-icon"><Headset size={22} weight="bold" /></span>
                     <div>
                       <h4>Prayer Line</h4>
-                      <p>Tue, Thu, Sat at 7:30 PM · <span>Join on Zoom</span></p>
+                      <p>{prayerLineNote}</p>
                     </div>
                   </a>
                 </div>
@@ -66,9 +73,16 @@ export default function Contact() {
             <div>
               <Reveal delay={0.08}>
                 <div className="invite-card">
-                  <h3>There is a seat saved<br /><em>for you.</em></h3>
+                  <h3>{inviteTitle.includes("saved") ? (
+                    <>
+                      {inviteTitle.split("saved")[0]}saved<br />
+                      <em>{inviteTitle.split("saved")[1]?.trim() || "for you."}</em>
+                    </>
+                  ) : (
+                    inviteTitle
+                  )}</h3>
                   <p>
-                    Whether you are exploring faith for the first time or looking for a church to call home, you belong here. Come as you are this Sunday.
+                    {inviteLead}
                   </p>
                   <div className="invite-actions">
                     <a className="btn btn-secondary btn-sm" href={eventsUrl} target="_blank" rel="noreferrer">

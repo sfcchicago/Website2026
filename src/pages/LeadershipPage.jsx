@@ -12,12 +12,24 @@ export default function Leadership() {
     ? currentLeadership.ministerialSupport
     : initialLeadership.ministerialSupport;
 
+  const headerEyebrow = currentLeadership?.headerEyebrow || "Leadership";
+  const headerTitle = currentLeadership?.headerTitle || "Servant leadership.";
+  const headerLead = currentLeadership?.headerLead || "The people who steward the vision, worship, hospitality, and ministry of our church every week.";
+
+  const boardSectionEyebrow = currentLeadership?.boardSectionEyebrow || "Board of Directors";
+  const boardSectionTitle = currentLeadership?.boardSectionTitle || "Guiding the vision";
+  const boardSectionSubtitle = currentLeadership?.boardSectionSubtitle || "The Board stewards the vision, finances, and direction of the church.";
+
+  const ministerialSectionEyebrow = currentLeadership?.ministerialSectionEyebrow || "Ministerial Support";
+  const ministerialSectionTitle = currentLeadership?.ministerialSectionTitle || "The hands and feet";
+  const ministerialSectionSubtitle = currentLeadership?.ministerialSectionSubtitle || "Coordinators who keep worship, hospitality, media, and ministry moving every week.";
+
   return (
     <>
       <PageHeader
-        eyebrow="Leadership"
-        title="Servant leadership."
-        lead="The people who steward the vision, worship, hospitality, and ministry of our church every week."
+        eyebrow={headerEyebrow}
+        title={headerTitle}
+        lead={headerLead}
         className="leadership-header"
       />
 
@@ -25,9 +37,9 @@ export default function Leadership() {
         <div className="container">
           <Reveal>
             <div className="section-head">
-              <span className="badge"><span className="badge-dot" /> Board of Directors</span>
-              <h2 className="section-title">Guiding the <em>vision</em></h2>
-              <p className="section-subtitle">The Board stewards the vision, finances, and direction of the church.</p>
+              <span className="badge"><span className="badge-dot" /> {boardSectionEyebrow}</span>
+              <h2 className="section-title">{boardSectionTitle}</h2>
+              <p className="section-subtitle">{boardSectionSubtitle}</p>
             </div>
           </Reveal>
 
@@ -45,9 +57,9 @@ export default function Leadership() {
         <div className="container">
           <Reveal>
             <div className="section-head">
-              <span className="badge"><span className="badge-dot" /> Ministerial Support</span>
-              <h2 className="section-title">The hands and <em>feet</em></h2>
-              <p className="section-subtitle">Coordinators who keep worship, hospitality, media, and ministry moving every week.</p>
+              <span className="badge"><span className="badge-dot" /> {ministerialSectionEyebrow}</span>
+              <h2 className="section-title">{ministerialSectionTitle}</h2>
+              <p className="section-subtitle">{ministerialSectionSubtitle}</p>
             </div>
           </Reveal>
 

@@ -46,6 +46,18 @@ export default function NewHere() {
     { number: "2", label: "Languages each Sunday" },
   ];
 
+  const heroEyebrow = about?.heroEyebrow || "I'm New Here";
+  const heroTitle = about?.heroTitle || "Welcome home. We saved you a seat.";
+  const heroLead = about?.heroLead || "Whether you are exploring faith for the first time or looking for a church to call home, you belong here.";
+  const storyEyebrow = about?.storyEyebrow || "Our story";
+  const storyTitle = about?.storyTitle || "From a living room to a family of believers.";
+  const journeyEyebrow = about?.journeyEyebrow || "History";
+  const journeyTitle = about?.journeyTitle || "Our Journey";
+  const journeySubtitle = about?.journeySubtitle || "From a humble living room to a growing family of believers spanning decades.";
+  const visionEyebrow = about?.visionEyebrow || "Our Vision";
+  const visionTitle = about?.visionTitle || "To provide a hope and a future.";
+  const visionLead = about?.visionLead || "We are driven by our commitment to four core pillars that guide everything we do as a church family.";
+
   return (
     <div className="new-here-page">
       <section className="new-here-hero">
@@ -64,7 +76,7 @@ export default function NewHere() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <span className="badge-dot" /> I'm New Here
+                  <span className="badge-dot" /> {heroEyebrow}
                 </motion.span>
                 <motion.h1
                   className="page-title new-here-title"
@@ -72,8 +84,14 @@ export default function NewHere() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.04, duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  Welcome home.<br />
-                  <em>We saved you a seat.</em>
+                  {heroTitle.includes(".") ? (
+                    <>
+                      {heroTitle.split(".")[0]}.<br />
+                      <em>{heroTitle.split(".").slice(1).join(".").trim()}</em>
+                    </>
+                  ) : (
+                    heroTitle
+                  )}
                 </motion.h1>
                 <motion.p
                   className="page-lead new-here-lead"
@@ -81,7 +99,7 @@ export default function NewHere() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.08, duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  Whether you are exploring faith for the first time or looking for a church to call home, you belong here.
+                  {heroLead}
                 </motion.p>
               </motion.div>
             </div>
@@ -90,11 +108,10 @@ export default function NewHere() {
               <Reveal delay={0.12}>
                 <div className="new-here-story-content">
                   <span className="badge" style={{ marginBottom: 14 }}>
-                    <span className="badge-dot" /> Our story
+                    <span className="badge-dot" /> {storyEyebrow}
                   </span>
                   <h2 className="section-title new-here-story-title">
-                    From a living room<br />
-                    <em>to a family of believers.</em>
+                    {storyTitle}
                   </h2>
                   <div className="story-body new-here-story-body">
                     <p style={{ marginBottom: 14 }}>{missionData.mission}</p>
@@ -130,14 +147,14 @@ export default function NewHere() {
                 <div className="a-journey-left-content">
                   <div className="a-journey-badge-wrap">
                     <span className="badge">
-                      <span className="badge-dot" /> History
+                      <span className="badge-dot" /> {journeyEyebrow}
                     </span>
                   </div>
                   <h3 className="section-title" style={{ margin: 0, fontSize: "clamp(28px, 3.6vw, 40px)", letterSpacing: "-0.03em" }}>
-                    Our Journey
+                    {journeyTitle}
                   </h3>
                   <p className="page-lead" style={{ fontSize: "clamp(14.5px, 1.25vw, 16px)", marginTop: 10, marginBottom: 20, color: "var(--muted)", lineHeight: 1.55 }}>
-                    From a humble living room to a growing family of believers spanning decades.
+                    {journeySubtitle}
                   </p>
                   <div className="a-journey-dates-list">
                     {journeySteps.map((step, idx) => (
@@ -204,13 +221,13 @@ export default function NewHere() {
             <div className="vision-left">
               <Reveal>
                 <span className="badge" style={{ marginBottom: 20 }}>
-                  <span className="badge-dot" /> Our Vision
+                  <span className="badge-dot" /> {visionEyebrow}
                 </span>
                 <h2 className="section-title" style={{ fontSize: "clamp(36px, 4.5vw, 56px)", marginBottom: 24, lineHeight: 1.1 }}>
-                  To provide a <span className="text-gradient">hope</span> and a <span className="text-gradient">future.</span>
+                  {visionTitle}
                 </h2>
                 <p className="section-lead" style={{ fontSize: "clamp(16px, 1.5vw, 18px)", color: "var(--muted)", lineHeight: 1.6, maxWidth: 440 }}>
-                  We are driven by our commitment to four core pillars that guide everything we do as a church family.
+                  {visionLead}
                 </p>
               </Reveal>
             </div>

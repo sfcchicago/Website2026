@@ -230,7 +230,7 @@ function Hero({ previewSettings }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08, duration: 0.28, ease }}
           >
-            here
+            {homeContent?.heroTitleSuffix || "here"}
           </motion.span>
         </h1>
 
@@ -250,11 +250,11 @@ function Hero({ previewSettings }) {
           transition={{ delay: 0.16, duration: 0.25, ease }}
         >
           <Link className="btn btn-primary" to="/new-here">
-            Plan your visit
+            {homeContent?.heroCtaPrimaryText || "Plan your visit"}
             <span className="btn-ico"><ArrowRight size={14} weight="bold" /></span>
           </Link>
           <a className="btn btn-secondary" href={liveUrl} target="_blank" rel="noreferrer">
-            <Play size={14} weight="fill" /> Watch live
+            <Play size={14} weight="fill" /> {homeContent?.heroCtaSecondaryText || "Watch live"}
           </a>
         </motion.div>
 
@@ -429,9 +429,9 @@ function Story() {
       <div className="container">
         <Fade>
           <div className="section-head center">
-            <span className="badge"><span className="badge-dot" /> Our story</span>
-            <h2 className="section-title">Devoted to God,<br /><em>and to one another.</em></h2>
-            <p className="section-subtitle">{about?.mission || mission.mission}</p>
+            <span className="badge"><span className="badge-dot" /> {homeContent?.storyBadge || "Our story"}</span>
+            <h2 className="section-title">{homeContent?.storyTitle || <>Devoted to God,<br /><em>and to one another.</em></>}</h2>
+            <p className="section-subtitle">{homeContent?.storySubtitle || about?.mission || mission.mission}</p>
           </div>
         </Fade>
 
@@ -451,7 +451,7 @@ function Story() {
 }
 
 function Week() {
-  const { services: liveServices } = useSiteData();
+  const { services: liveServices, homeContent } = useSiteData();
   const weekList = liveServices || week;
 
   return (
@@ -459,9 +459,9 @@ function Week() {
       <div className="container">
         <Fade>
           <div className="section-head center">
-            <span className="badge"><span className="badge-dot" /> Your Sunday</span>
-            <h2 className="section-title">Where we gather every Sunday.</h2>
-            <p className="section-subtitle">Every week we gather to worship, learn, pray, and grow. Here is what a typical week looks like.</p>
+            <span className="badge"><span className="badge-dot" /> {homeContent?.servicesBadge || "Your Sunday"}</span>
+            <h2 className="section-title">{homeContent?.servicesTitle || "Where we gather every Sunday."}</h2>
+            <p className="section-subtitle">{homeContent?.servicesSubtitle || "Every week we gather to worship, learn, pray, and grow. Here is what a typical week looks like."}</p>
           </div>
         </Fade>
 
@@ -485,19 +485,22 @@ function Week() {
 }
 
 function Directory() {
+  const { homeContent } = useSiteData();
+  const dirList = homeContent?.directory?.length ? homeContent.directory : directory;
+
   return (
     <section>
       <div className="container">
         <Fade>
           <div className="section-head center">
-            <span className="badge"><span className="badge-dot" /> Start here</span>
-            <h2 className="section-title">Find your next step.</h2>
-            <p className="section-subtitle">Whether you're visiting for the first time or looking to get more involved, here's where to go.</p>
+            <span className="badge"><span className="badge-dot" /> {homeContent?.directoryBadge || "Start here"}</span>
+            <h2 className="section-title">{homeContent?.directoryTitle || "Find your next step."}</h2>
+            <p className="section-subtitle">{homeContent?.directorySubtitle || "Whether you're visiting for the first time or looking to get more involved, here's where to go."}</p>
           </div>
         </Fade>
 
         <div className="dir-list">
-          {directory.map((item, i) => (
+          {dirList.map((item, i) => (
             <Fade key={item.to} delay={0.03 * i}>
               <Link
                 className="dir-row"
@@ -533,9 +536,9 @@ function FAQ() {
       <div className="container">
         <Fade>
           <div className="section-head center">
-            <span className="badge"><span className="badge-dot" /> FAQ</span>
-            <h2 className="section-title">Questions? Here are the answers.</h2>
-            <p className="section-subtitle">Everything you need to know before visiting Sharon Fellowship Church for the first time.</p>
+            <span className="badge"><span className="badge-dot" /> {homeContent?.faqBadge || "FAQ"}</span>
+            <h2 className="section-title">{homeContent?.faqTitle || "Questions? Here are the answers."}</h2>
+            <p className="section-subtitle">{homeContent?.faqSubtitle || "Everything you need to know before visiting Sharon Fellowship Church for the first time."}</p>
           </div>
         </Fade>
 
@@ -562,8 +565,8 @@ function FAQ() {
 
             <div className="faq-more">
               <div className="faq-more-copy">
-                <h3>Got more questions?</h3>
-                <p>Reach out anytime — we'd love to hear from you.</p>
+                <h3>{homeContent?.faqMoreTitle || "Got more questions?"}</h3>
+                <p>{homeContent?.faqMoreText || "Reach out anytime — we'd love to hear from you."}</p>
               </div>
               <Link className="btn btn-secondary" to="/contact">
                 Contact us <ArrowRight size={14} weight="bold" />
@@ -577,24 +580,26 @@ function FAQ() {
 }
 
 function CTA() {
+  const { homeContent, settings } = useSiteData();
+
   return (
     <section className="cta-section">
       <div className="container">
         <Fade>
           <div className="cta-inner">
-            <span className="badge"><span className="badge-dot" /> Get started</span>
-            <h2>A seat is saved<br /><em>for you.</em></h2>
-            <p>Join us this Sunday at 9:30 and 11 AM. All are welcome.</p>
+            <span className="badge"><span className="badge-dot" /> {homeContent?.ctaBadge || "Get started"}</span>
+            <h2>{homeContent?.ctaTitle || <>A seat is saved<br /><em>for you.</em></>}</h2>
+            <p>{homeContent?.ctaSubtitle || "Join us this Sunday at 9:30 and 11 AM. All are welcome."}</p>
             <div className="cta-actions">
               <Link className="btn btn-primary" to="/contact">
                 Visit us
                 <span className="btn-ico"><ArrowRight size={14} weight="bold" /></span>
               </Link>
-              <a className="btn btn-secondary" href={church.maps} target="_blank" rel="noreferrer">
+              <a className="btn btn-secondary" href={settings?.mapsUrl || church.maps} target="_blank" rel="noreferrer">
                 <MapPin size={14} weight="bold" /> Directions
               </a>
             </div>
-            <p className="cta-trust">Every Sunday · Malayalam & English · All are welcome</p>
+            <p className="cta-trust">{homeContent?.ctaTrust || "Every Sunday · Malayalam & English · All are welcome"}</p>
           </div>
         </Fade>
       </div>

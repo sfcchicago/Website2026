@@ -92,9 +92,9 @@ export default function Pastor() {
   return (
     <>
       <PageHeader
-        eyebrow="Our Pastor"
-        title="Shepherd of this house."
-        lead="A faithful servant called to preach the uncompromised Word of God, love the flock, and build the body of Christ."
+        eyebrow={currentPastor?.headerEyebrow || "Our Pastor"}
+        title={currentPastor?.headerTitle || "Shepherd of this house."}
+        lead={currentPastor?.headerLead || "A faithful servant called to preach the uncompromised Word of God, love the flock, and build the body of Christ."}
         className="pastor-header"
       />
 
@@ -141,41 +141,28 @@ export default function Pastor() {
                 </div>
 
                 <blockquote className="aesthetic-quote">
-                  &ldquo;To walk with this flock is a sacred calling&mdash;anchored in the Word, grounded in prayer, and devoted to seeing every generation flourish in Christ.&rdquo;
+                  &ldquo;{currentPastor?.quote || "To walk with this flock is a sacred calling—anchored in the Word, grounded in prayer, and devoted to seeing every generation flourish in Christ."}&rdquo;
                 </blockquote>
 
                 <div className="aesthetic-card-bottom">
                   <div className="aesthetic-divider" />
 
                   <div className="aesthetic-pills-row">
-                    <motion.span
-                      className="aesthetic-pill"
-                      whileHover={{ y: -2, scale: 1.03 }}
-                      transition={{ type: "spring", stiffness: 450, damping: 20 }}
-                    >
-                      <MapPin weight="duotone" /> {currentPastor.location}
-                    </motion.span>
-                    <motion.span
-                      className="aesthetic-pill"
-                      whileHover={{ y: -2, scale: 1.03 }}
-                      transition={{ type: "spring", stiffness: 450, damping: 20 }}
-                    >
-                      <Heart weight="duotone" /> Mini &amp; M. G. Johnson
-                    </motion.span>
-                    <motion.span
-                      className="aesthetic-pill"
-                      whileHover={{ y: -2, scale: 1.03 }}
-                      transition={{ type: "spring", stiffness: 450, damping: 20 }}
-                    >
-                      <GraduationCap weight="duotone" /> M.Th &bull; UBS &amp; Gurukul Scholar
-                    </motion.span>
-                    <motion.span
-                      className="aesthetic-pill"
-                      whileHover={{ y: -2, scale: 1.03 }}
-                      transition={{ type: "spring", stiffness: 450, damping: 20 }}
-                    >
-                      <Church weight="duotone" /> 50-Yr Pastoral Heritage
-                    </motion.span>
+                    {(currentPastor?.pills || [
+                      currentPastor.location,
+                      "Mini & M. G. Johnson",
+                      "M.Th • UBS & Gurukul Scholar",
+                      "50-Yr Pastoral Heritage"
+                    ]).map((pill, i) => (
+                      <motion.span
+                        key={i}
+                        className="aesthetic-pill"
+                        whileHover={{ y: -2, scale: 1.03 }}
+                        transition={{ type: "spring", stiffness: 450, damping: 20 }}
+                      >
+                        {i === 0 ? <MapPin weight="duotone" /> : i === 1 ? <Heart weight="duotone" /> : i === 2 ? <GraduationCap weight="duotone" /> : <Church weight="duotone" />} {pill}
+                      </motion.span>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -213,9 +200,9 @@ export default function Pastor() {
           <Reveal>
             <SectionHead
               center
-              eyebrow="Our History"
-              title="Shepherds who have <em>led us well</em>"
-              lead="From a living room in 1999 to our own building in 2004, six pastors have carried this flock."
+              eyebrow={currentPastor?.historyEyebrow || "Our History"}
+              title={currentPastor?.historyTitle || <>Shepherds who have <em>led us well</em></>}
+              lead={currentPastor?.historyLead || "From a living room in 1999 to our own building in 2004, six pastors have carried this flock."}
             />
           </Reveal>
 
@@ -239,8 +226,8 @@ export default function Pastor() {
 
           <Reveal delay={0.14}>
             <div className="pastor-verse">
-              <p>&ldquo;Watch over the flock of God that is among you, shepherding them by the will of God.&rdquo;</p>
-              <span>1 Peter 5:2</span>
+              <p>&ldquo;{currentPastor?.pastoralVerseText || "Watch over the flock of God that is among you, shepherding them by the will of God."}&rdquo;</p>
+              <span>{currentPastor?.pastoralVerseRef || "1 Peter 5:2"}</span>
             </div>
           </Reveal>
         </div>

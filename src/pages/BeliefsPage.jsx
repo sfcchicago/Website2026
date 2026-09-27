@@ -15,8 +15,19 @@ const fullStatementTopics = [
 ];
 
 export default function Beliefs() {
-  const { beliefs } = useSiteData();
+  const { beliefs, beliefsDoc } = useSiteData();
   const beliefsList = beliefs?.length ? beliefs : initialBeliefs.items;
+
+  const headerEyebrow = beliefsDoc?.headerEyebrow || "What We Believe";
+  const headerTitle = beliefsDoc?.headerTitle || "Anchored in the Word.";
+  const headerLead = beliefsDoc?.headerLead || "Anchored in the 66 books of the Bible, joyfully Pentecostal, and centered on Jesus.";
+
+  const cardEyebrow = beliefsDoc?.statementCardEyebrow || "Full Statement of Faith";
+  const cardTitle = beliefsDoc?.statementCardTitle || "A Deeper Look at What We Hold True";
+  const cardDesc = beliefsDoc?.statementCardDescription || "Our church confession stands firmly on the whole counsel of Scripture. In addition to our foundational tenets above, our complete statement of faith articulates our biblical convictions on:";
+  const cardTopics = beliefsDoc?.statementTopics?.length ? beliefsDoc.statementTopics : fullStatementTopics;
+  const cardNote = beliefsDoc?.statementNote || "Our complete, detailed statement of faith document is gladly available upon request.";
+  const cardCta = beliefsDoc?.statementCtaText || "Request Full Statement";
 
   // Allow multiple beliefs to be open independently
   const [openIndices, setOpenIndices] = useState(() => new Set());
@@ -36,9 +47,9 @@ export default function Beliefs() {
   return (
     <>
       <PageHeader
-        eyebrow="What We Believe"
-        title="Anchored in the Word."
-        lead="Anchored in the 66 books of the Bible, joyfully Pentecostal, and centered on Jesus."
+        eyebrow={headerEyebrow}
+        title={headerTitle}
+        lead={headerLead}
       />
 
       <section className="beliefs-section">
@@ -76,17 +87,17 @@ export default function Beliefs() {
                     <BookOpenText size={24} weight="duotone" />
                   </div>
                   <div className="statement-titles">
-                    <span className="statement-eyebrow">Full Statement of Faith</span>
-                    <h3 className="statement-title">A Deeper Look at What We Hold True</h3>
+                    <span className="statement-eyebrow">{cardEyebrow}</span>
+                    <h3 className="statement-title">{cardTitle}</h3>
                   </div>
                 </div>
 
                 <p className="statement-desc">
-                  Our church confession stands firmly on the whole counsel of Scripture. In addition to our foundational tenets above, our complete statement of faith articulates our biblical convictions on:
+                  {cardDesc}
                 </p>
 
                 <ul className="statement-topics" aria-label="Key doctrinal topics">
-                  {fullStatementTopics.map((topic) => (
+                  {cardTopics.map((topic) => (
                     <li key={topic} className="statement-pill">
                       <CheckCircle size={15} weight="fill" className="pill-check" />
                       <span>{topic}</span>
@@ -96,10 +107,10 @@ export default function Beliefs() {
 
                 <div className="statement-footer">
                   <p className="statement-note-text">
-                    Our complete, detailed statement of faith document is gladly available upon request.
+                    {cardNote}
                   </p>
                   <Link to="/contact" className="btn btn-primary btn-sm statement-cta">
-                    <span>Request Full Statement</span>
+                    <span>{cardCta}</span>
                     <span className="btn-ico">
                       <ArrowRight size={14} weight="bold" />
                     </span>
