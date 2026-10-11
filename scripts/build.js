@@ -8,7 +8,10 @@ console.log("Building Vite application with Sanity CMS...");
 // Step 1: Run Vite build
 execSync("npx vite build", { stdio: "inherit", env: process.env });
 
-// Step 2: Fetch active 301/302 redirects from Sanity and generate _redirects for Cloudflare Pages & Netlify
+// Step 2: Fetch active 301/302 redirects from Sanity and generate _redirects
+// Note: Wrangler Cloudflare Workers Assets already handles SPA routing via:
+// "not_found_handling": "single-page-application" in wrangler.json.
+// Cloudflare explicitly disallows "/* /index.html 200" in _redirects because it causes an infinite loop error (code: 100324).
 try {
   console.log("Fetching dynamic redirects from Sanity...");
   const client = createClient({
@@ -24,7 +27,6 @@ try {
 
   const lines = [];
 
-  // Cloudflare Pages / Netlify standard rules
   if (Array.isArray(redirects) && redirects.length > 0) {
     for (const r of redirects) {
       if (r.source && r.destination) {
@@ -36,26 +38,29 @@ try {
     }
   }
 
-  // SPA fallback rule: redirect non-file routes to /index.html 200
-  lines.push("/* /index.html 200");
-
   const distDir = path.resolve("dist");
-  if (fs.existsSync(distDir)) {
-    fs.writeFileSync(path.join(distDir, "_redirects"), lines.join("\n") + "\n", "utf8");
-    console.log(`Generated dist/_redirects with ${redirects?.length || 0} custom redirects.`);
-  }
-
-  // Also sync to public/_redirects for development or static serving
   const publicDir = path.resolve("public");
-  if (fs.existsSync(publicDir)) {
-    fs.writeFileSync(path.join(publicDir, "_redirects"), lines.join("\n") + "\n", "utf8");
+
+  if (lines.length > 0) {
+    const content = lines.join("\n") + "\n";
+    if (fs.existsSync(distDir)) {
+      fs.writeFileSync(path.join(distDir, "_redirects"), content, "utf8");
+      console.log(`Generated dist/_redirects with ${lines.length} custom redirects.`);
+    }
+    if (fs.existsSync(publicDir)) {
+      fs.writeFileSync(path.join(publicDir, "_redirects"), content, "utf8");
+    }
+  } else {
+    // If no custom redirects, remove any existing _redirects to avoid Cloudflare validation errors
+    if (fs.existsSync(path.join(distDir, "_redirects"))) {
+      fs.unlinkSync(path.join(distDir, "_redirects"));
+    }
+    if (fs.existsSync(path.join(publicDir, "_redirects"))) {
+      fs.unlinkSync(path.join(publicDir, "_redirects"));
+    }
   }
 } catch (err) {
-  console.warn("Notice: Could not sync remote redirects during build (using fallback SPA rule):", err.message);
-  const distDir = path.resolve("dist");
-  if (fs.existsSync(distDir)) {
-    fs.writeFileSync(path.join(distDir, "_redirects"), "/* /index.html 200\n", "utf8");
-  }
+  console.warn("Notice: Could not sync remote redirects during build:", err.message);
 }
 
 console.log("Build complete!");
