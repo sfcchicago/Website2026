@@ -53,6 +53,44 @@ export default {
       description: "e.g. Every Sunday · Malayalam 9:30 AM · English 11 AM · All welcome",
     },
     {
+      name: "heroPhotos",
+      title: "Hero Rotating Background Photos",
+      type: "array",
+      description: "Upload custom photos for the full-screen rotating landing hero slideshow. If empty, the default church photos are displayed.",
+      of: [
+        {
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            {
+              name: "alt",
+              title: "Alternative Text",
+              type: "string",
+              description: "Short description of the photo",
+            },
+            {
+              name: "posX",
+              title: "Focal Position X (%)",
+              type: "number",
+              description: "Center X percentage (0-100, default 50)",
+            },
+            {
+              name: "posY",
+              title: "Focal Position Y (%)",
+              type: "number",
+              description: "Center Y percentage (0-100, default 50)",
+            },
+            {
+              name: "scale",
+              title: "Scale Multiplier",
+              type: "number",
+              description: "Zoom scale (default 1.0, e.g. 1.05)",
+            },
+          ],
+        },
+      ],
+    },
+    {
       name: "storyBadge",
       title: "Story Section Badge",
       type: "string",

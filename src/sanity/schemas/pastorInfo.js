@@ -9,8 +9,14 @@ export default {
     { name: "name", title: "Pastor Name", type: "string" },
     { name: "role", title: "Role / Title", type: "string" },
     { name: "since", title: "Serving Since Line", type: "string" },
-    { name: "location", title: "Location", type: "string" },
-    { name: "photo", title: "Pastor Photo Path or URL", type: "string" },
+    {
+      name: "photo",
+      title: "Pastor Portrait Photo",
+      type: "image",
+      options: { hotspot: true },
+      description: "Upload Pastor M. G. Johnson's portrait photograph.",
+    },
+    { name: "photoPosition", title: "Photo Focal Alignment (optional)", type: "string", description: "e.g. center 20% or top center" },
     { name: "quote", title: "Featured Quote Block", type: "text", rows: 3 },
     {
       name: "pills",
@@ -38,7 +44,14 @@ export default {
           fields: [
             { name: "name", title: "Pastor Name", type: "string" },
             { name: "years", title: "Years Served", type: "string" },
-            { name: "photo", title: "Photo Path or URL", type: "string" },
+            {
+              name: "photo",
+              title: "Pastor Portrait Photo",
+              type: "image",
+              options: { hotspot: true },
+              description: "Upload portrait photograph for this pastor.",
+            },
+            { name: "photoPosition", title: "Photo Focal Alignment (optional)", type: "string", description: "e.g. center 20%" },
           ],
         },
       ],

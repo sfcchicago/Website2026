@@ -7,6 +7,7 @@ import servicesList from "./servicesList";
 import beliefsList from "./beliefsList";
 import missionVision from "./missionVision";
 import sundaySchoolList from "./sundaySchoolList";
+import redirectRule from "./redirectRule";
 
 export const schemaTypes = [
   churchInfo,
@@ -18,4 +19,5 @@ export const schemaTypes = [
   beliefsList,
   missionVision,
   sundaySchoolList,
+  redirectRule,
 ];

@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
+import RedirectHandler from "./components/RedirectHandler";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import NewHere from "./pages/NewHere";
@@ -38,6 +39,7 @@ export default function App() {
     <SiteProvider>
       <BrowserRouter>
         <ScrollToTop />
+        <RedirectHandler />
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<Home />} />

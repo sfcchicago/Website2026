@@ -4,6 +4,20 @@ export default {
   type: "document",
   fields: [
     { name: "name", title: "Church Name", type: "string" },
+    {
+      name: "logo",
+      title: "Church Logo (Light / Inverted)",
+      type: "image",
+      options: { hotspot: true },
+      description: "Upload the main church logo. Used in the header navbar and footer.",
+    },
+    {
+      name: "logoDark",
+      title: "Church Logo Dark (Optional)",
+      type: "image",
+      options: { hotspot: true },
+      description: "Optional dark-themed logo variant for light backgrounds.",
+    },
     { name: "tagline", title: "Tagline", type: "string" },
     { name: "address", title: "Street Address", type: "string" },
     { name: "phone", title: "Phone Number", type: "string" },

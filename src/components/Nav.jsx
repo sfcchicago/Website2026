@@ -89,7 +89,7 @@ export default function Nav() {
             onMouseEnter={() => preloadRoute("/")}
             onTouchStart={() => preloadRoute("/")}
           >
-            <img src={church.logo} alt="Sharon Fellowship Church" />
+            <img src={settings?.logo || church.logo} alt={settings?.name || "Sharon Fellowship Church"} />
           </Link>
 
           <LayoutGroup id="nav-pill">

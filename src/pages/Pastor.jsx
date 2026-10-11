@@ -8,19 +8,22 @@ import { Church, MapPin, GraduationCap, Heart } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 
 function TlAvatar({ person }) {
+  const { urlFor } = useSiteData();
   const [imgErr, setImgErr] = useState(false);
-  const [src, setSrc] = useState(person?.photo || "");
-  const [isLoaded, setIsLoaded] = useState(() => isImageReady(person?.photo || ""));
+  const photoUrl = (urlFor && person?.photo && typeof person.photo === "object" ? urlFor(person.photo) : null) || (typeof person?.photo === "string" ? person.photo : "") || "";
+  const [src, setSrc] = useState(photoUrl);
+  const [isLoaded, setIsLoaded] = useState(() => isImageReady(photoUrl));
 
   useEffect(() => {
-    setSrc(person?.photo || "");
+    const nextPhoto = (urlFor && person?.photo && typeof person.photo === "object" ? urlFor(person.photo) : null) || (typeof person?.photo === "string" ? person.photo : "") || "";
+    setSrc(nextPhoto);
     setImgErr(false);
-    if (person?.photo && !isImageReady(person.photo)) {
-      preloadImage(person.photo).then(() => setIsLoaded(true));
+    if (nextPhoto && !isImageReady(nextPhoto)) {
+      preloadImage(nextPhoto).then(() => setIsLoaded(true));
     } else {
       setIsLoaded(true);
     }
-  }, [person?.photo]);
+  }, [person?.photo, urlFor]);
 
   const initials = (person?.name || "Pastor")
     .replace(/^Rev\.?\s*/i, "")

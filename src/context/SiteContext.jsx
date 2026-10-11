@@ -17,13 +17,19 @@ const SANITY_QUERY = `{
   "servicesList": *[_type == "servicesList" && !(_id in path("drafts.**"))][0],
   "beliefsList": *[_type == "beliefsList" && !(_id in path("drafts.**"))][0],
   "missionVision": *[_type == "missionVision" && !(_id in path("drafts.**"))][0],
-  "sundaySchoolList": *[_type == "sundaySchoolList" && !(_id in path("drafts.**"))][0]
+  "sundaySchoolList": *[_type == "sundaySchoolList" && !(_id in path("drafts.**"))][0],
+  "redirectRules": *[_type == "redirectRule" && !(_id in path("drafts.**")) && active != false]
 }`;
 
 function buildUnifiedSettings(churchInfo, quickLinks, fallback) {
+  const logoUrl = churchInfo?.logo ? urlFor(churchInfo.logo) : null;
+  const logoDarkUrl = churchInfo?.logoDark ? urlFor(churchInfo.logoDark) : null;
+
   return {
     ...fallback,
     name: churchInfo?.name || "Sharon Fellowship Church",
+    logo: logoUrl || fallback.logo || "/logo.png",
+    logoDark: logoDarkUrl || null,
     tagline: churchInfo?.tagline || fallback.tagline,
     address: churchInfo?.address || fallback.address,
     phone: churchInfo?.phone || fallback.phone,
@@ -129,6 +135,7 @@ export function SiteProvider({ children }) {
   const [about, setAbout] = useState(initialMission);
   const [sundaySchool, setSundaySchool] = useState(initialLeadership.sundaySchool);
   const [sundaySchoolInfo, setSundaySchoolInfo] = useState(null);
+  const [redirectRules, setRedirectRules] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchSanityData = useCallback(async () => {
@@ -140,6 +147,10 @@ export function SiteProvider({ children }) {
       if (data.quickLinks) setQuickLinks(data.quickLinks);
 
       setSettings(buildUnifiedSettings(data.churchInfo, data.quickLinks, initialSettings));
+
+      if (data.redirectRules) {
+        setRedirectRules(data.redirectRules);
+      }
 
       if (data.homeContent) {
         setHomeContent((prev) => ({
@@ -220,7 +231,7 @@ export function SiteProvider({ children }) {
     let subscription = null;
     try {
       subscription = client.listen(
-        `*[_type in ["churchInfo", "quickLinks", "homeContent", "pastorInfo", "leadership", "servicesList", "beliefsList", "missionVision", "sundaySchoolList"]]`
+        `*[_type in ["churchInfo", "quickLinks", "homeContent", "pastorInfo", "leadership", "servicesList", "beliefsList", "missionVision", "sundaySchoolList", "redirectRule"]]`
       ).subscribe(() => {
         fetchSanityData();
       });
@@ -251,6 +262,7 @@ export function SiteProvider({ children }) {
         about,
         sundaySchool,
         sundaySchoolInfo,
+        redirectRules,
         urlFor,
         loading,
         refresh: fetchSanityData,

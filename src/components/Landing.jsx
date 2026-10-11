@@ -124,25 +124,48 @@ let persistentHeroIndex = 0;
 function Hero({ previewSettings }) {
   const reduce = useReducedMotion();
   const { settings: ctxSettings } = useSiteSettings();
-  const { homeContent, services: allServices } = useSiteData();
+  const { homeContent, services: allServices, urlFor } = useSiteData();
   const settings = previewSettings || ctxSettings;
   const liveUrl = settings?.liveUrl || church.links.live;
+
+  const activeHeroImages = (() => {
+    if (homeContent?.heroPhotos && homeContent.heroPhotos.length > 0) {
+      const mapped = homeContent.heroPhotos
+        .map((p, idx) => {
+          const src = typeof p === "string" ? p : urlFor ? urlFor(p) : "";
+          if (!src) return null;
+          return {
+            id: p._key || `sanity-hero-${idx}`,
+            src,
+            posX: typeof p.posX === "number" ? p.posX : 50,
+            posY: typeof p.posY === "number" ? p.posY : 50,
+            scale: typeof p.scale === "number" ? p.scale : 1.02,
+          };
+        })
+        .filter(Boolean);
+      if (mapped.length > 0) return mapped;
+    }
+    return HERO_IMAGES;
+  })();
+
   const [currentIndex, setCurrentIndex] = useState(persistentHeroIndex);
   const [prevIndex, setPrevIndex] = useState(null);
 
   const sundayServices = (allServices && allServices.length > 0 ? allServices : services).filter((s) => s.day === "Sunday");
 
   useEffect(() => {
-    persistentHeroIndex = currentIndex;
-    const nextIdx = (currentIndex + 1) % HERO_IMAGES.length;
-    preloadImage(HERO_IMAGES[nextIdx].src);
+    persistentHeroIndex = currentIndex % activeHeroImages.length;
+    const nextIdx = (currentIndex + 1) % activeHeroImages.length;
+    if (activeHeroImages[nextIdx]?.src) {
+      preloadImage(activeHeroImages[nextIdx].src);
+    }
 
     const timer = setInterval(() => {
-      setPrevIndex(currentIndex);
-      setCurrentIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+      setPrevIndex(currentIndex % activeHeroImages.length);
+      setCurrentIndex((prev) => (prev + 1) % activeHeroImages.length);
     }, 6500);
     return () => clearInterval(timer);
-  }, [currentIndex]);
+  }, [currentIndex, activeHeroImages]);
 
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
@@ -157,8 +180,8 @@ function Hero({ previewSettings }) {
   // Dynamic bottom darkness fade that ramps up on scroll to seamlessly blend into the canvas
   const heroBottomDarkness = useTransform(heroScroll, [0, 0.35], [0, 1]);
 
-  const currentPhoto = HERO_IMAGES[currentIndex];
-  const prevPhoto = prevIndex !== null ? HERO_IMAGES[prevIndex] : null;
+  const currentPhoto = activeHeroImages[currentIndex % activeHeroImages.length] || activeHeroImages[0];
+  const prevPhoto = prevIndex !== null ? (activeHeroImages[prevIndex % activeHeroImages.length] || null) : null;
 
   return (
     <section className="hero-section" ref={heroRef}>

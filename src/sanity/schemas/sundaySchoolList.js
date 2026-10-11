@@ -22,7 +22,14 @@ export default {
           fields: [
             { name: "name", title: "Teacher Name", type: "string" },
             { name: "role", title: "Class / Role", type: "string" },
-            { name: "photo", title: "Photo Path or URL", type: "string" },
+            {
+              name: "photo",
+              title: "Teacher Portrait Photo",
+              type: "image",
+              options: { hotspot: true },
+              description: "Upload portrait photograph.",
+            },
+            { name: "photoPosition", title: "Photo Position (optional)", type: "string", description: "e.g. center 20%" },
           ],
         },
       ],

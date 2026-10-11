@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <Link to="/">
-              <img src={church.logo} alt="Sharon Fellowship Church" />
+              <img src={settings?.logo || church.logo} alt={settings?.name || "Sharon Fellowship Church"} />
             </Link>
             <span className="footer-version">{establishedYear}</span>
             <p className="footer-desc">
