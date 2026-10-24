@@ -5,58 +5,66 @@ export default {
   fields: [
     {
       name: "heroBadge",
-      title: "Hero Badge",
+      title: "🏷️ Top badge (location & year)",
       type: "string",
-      description: "e.g. Kenosha, WI · Since 1999",
+      description: "Small text badge at the top of the homepage",
+      placeholder: "Kenosha, WI · Since 1999",
     },
     {
       name: "heroTitlePrefix",
-      title: "Hero Headline Prefix",
+      title: "📝 Headline first word",
       type: "string",
-      description: "e.g. You",
+      description: "The word before the rotating words (usually 'You')",
+      placeholder: "You",
     },
     {
       name: "cycleWords",
-      title: "Rotating Headline Words (You ...)",
+      title: "🔄 Rotating words (animates on homepage)",
       type: "array",
       of: [{ type: "string" }],
-      description: "Words that rotate after 'You' on the home hero (e.g. Belong, Matter, Are Seen, Are Home, Are Loved)",
+      description: "Words that rotate after 'You' on the homepage hero. Add multiple words, one per line.",
+      validation: Rule => Rule.min(1).error("Add at least one word")
     },
     {
       name: "heroTitleSuffix",
-      title: "Hero Headline Suffix",
+      title: "📝 Headline last word",
       type: "string",
-      description: "e.g. here",
+      description: "The word after the rotating words (usually 'here')",
+      placeholder: "here",
     },
     {
       name: "heroSubtitle",
-      title: "Hero Subtitle",
+      title: "✍️ Hero subtitle paragraph",
       type: "text",
       rows: 2,
+      description: "The description text below the main headline",
     },
     {
       name: "heroCtaPrimaryText",
-      title: "Primary Button Text",
+      title: "🔵 Main button text",
       type: "string",
-      description: "e.g. Plan your visit",
+      description: "Text for the primary (blue) button",
+      placeholder: "Plan your visit",
     },
     {
       name: "heroCtaSecondaryText",
-      title: "Secondary Button Text",
+      title: "⚪ Secondary button text",
       type: "string",
-      description: "e.g. Watch live",
+      description: "Text for the secondary button",
+      placeholder: "Watch live",
     },
     {
       name: "heroTrust",
-      title: "Hero Trust Banner Line",
+      title: "📅 Service times banner",
       type: "string",
-      description: "e.g. Every Sunday · Malayalam 9:30 AM · English 11 AM · All welcome",
+      description: "The banner showing service times and info",
+      placeholder: "Every Sunday · Malayalam 9:30 AM · English 11 AM · All welcome",
     },
     {
       name: "heroPhotos",
-      title: "Hero Rotating Background Photos",
+      title: "📷 Homepage Background Photos (Slideshow)",
       type: "array",
-      description: "Upload custom photos for the full-screen rotating landing hero slideshow. If empty, the default church photos are displayed.",
+      description: "Upload photos for the rotating background slideshow on the homepage. Click 'Add item' to add photos. Leave empty to use default church photos.",
       of: [
         {
           type: "image",
@@ -64,27 +72,28 @@ export default {
           fields: [
             {
               name: "alt",
-              title: "Alternative Text",
+              title: "📝 Photo description",
               type: "string",
-              description: "Short description of the photo",
+              description: "Brief description of what's in the photo (for accessibility)",
+              placeholder: "Church building exterior"
             },
             {
               name: "posX",
-              title: "Focal Position X (%)",
+              title: "🎯 Horizontal position (Advanced)",
               type: "number",
-              description: "Center X percentage (0-100, default 50)",
+              description: "Where to focus horizontally (0-100, leave blank for center at 50)",
             },
             {
               name: "posY",
-              title: "Focal Position Y (%)",
+              title: "🎯 Vertical position (Advanced)",
               type: "number",
-              description: "Center Y percentage (0-100, default 50)",
+              description: "Where to focus vertically (0-100, leave blank for center at 50)",
             },
             {
               name: "scale",
-              title: "Scale Multiplier",
+              title: "🔍 Zoom level (Advanced)",
               type: "number",
-              description: "Zoom scale (default 1.0, e.g. 1.05)",
+              description: "Zoom scale (leave blank for default 1.0, or use 1.05 for slight zoom)",
             },
           ],
         },
@@ -92,155 +101,243 @@ export default {
     },
     {
       name: "storyBadge",
-      title: "Story Section Badge",
+      title: "🏷️ Our Story section label",
       type: "string",
-      description: "e.g. Our story",
+      description: "Small badge above the story section",
+      placeholder: "Our story",
     },
     {
       name: "storyTitle",
-      title: "Story Section Title",
+      title: "📖 Our Story heading",
       type: "string",
-      description: "e.g. Devoted to God, and to one another.",
+      description: "Main title for the story section",
+      placeholder: "Devoted to God, and to one another.",
     },
     {
       name: "storySubtitle",
-      title: "Story Section Subtitle",
+      title: "✍️ Our Story description",
       type: "text",
       rows: 3,
+      description: "Tell your church's story in a few sentences",
     },
     {
       name: "stats",
-      title: "Key Stats",
+      title: "📊 Church Stats (Years, Families, etc.)",
       type: "array",
+      description: "Add key numbers about your church. Click 'Add item' to add a stat.",
       of: [
         {
           type: "object",
           fields: [
-            { name: "number", title: "Number / Stat", type: "string" },
-            { name: "label", title: "Label", type: "string" },
+            {
+              name: "number",
+              title: "🔢 Number",
+              type: "string",
+              description: "The statistic (e.g., '27+', '150+')",
+              placeholder: "27+"
+            },
+            {
+              name: "label",
+              title: "📝 Label",
+              type: "string",
+              description: "What the number represents",
+              placeholder: "Years of ministry"
+            },
           ],
+          preview: {
+            select: {
+              title: 'number',
+              subtitle: 'label'
+            }
+          }
         },
       ],
     },
     {
       name: "servicesBadge",
-      title: "Weekly Services Badge",
+      title: "🏷️ Services section label",
       type: "string",
-      description: "e.g. Your Sunday",
+      description: "Small badge above the weekly services section",
+      placeholder: "Your Sunday",
     },
     {
       name: "servicesTitle",
-      title: "Weekly Services Title",
+      title: "⛪ Services section heading",
       type: "string",
-      description: "e.g. Where we gather every Sunday.",
+      description: "Main title for the services section",
+      placeholder: "Where we gather every Sunday.",
     },
     {
       name: "servicesSubtitle",
-      title: "Weekly Services Subtitle",
+      title: "✍️ Services description",
       type: "text",
       rows: 2,
+      description: "Brief description of your Sunday services",
     },
     {
       name: "directoryBadge",
-      title: "Directory Badge",
+      title: "🏷️ Directory section label",
       type: "string",
-      description: "e.g. Start here",
+      description: "Small badge for the quick links section",
+      placeholder: "Start here",
     },
     {
       name: "directoryTitle",
-      title: "Directory Title",
+      title: "🗂️ Directory section heading",
       type: "string",
-      description: "e.g. Find your next step.",
+      description: "Main title for the directory/quick links section",
+      placeholder: "Find your next step.",
     },
     {
       name: "directorySubtitle",
-      title: "Directory Subtitle",
+      title: "✍️ Directory description",
       type: "text",
       rows: 2,
+      description: "Brief description for the directory section",
     },
     {
       name: "directory",
-      title: "Directory Navigation Cards",
+      title: "🔗 Quick Link Cards",
       type: "array",
+      description: "Navigation cards that link to important pages. Click 'Add item' to add a new card.",
       of: [
         {
           type: "object",
           fields: [
-            { name: "n", title: "Number", type: "string" },
-            { name: "label", title: "Card Title", type: "string" },
-            { name: "desc", title: "Description", type: "string" },
-            { name: "to", title: "Link Path", type: "string" },
+            {
+              name: "n",
+              title: "🔢 Card Number",
+              type: "string",
+              description: "Display number for the card (e.g., '01', '02')",
+              placeholder: "01"
+            },
+            {
+              name: "label",
+              title: "📝 Card Title",
+              type: "string",
+              description: "Main title of the card",
+              placeholder: "New here?"
+            },
+            {
+              name: "desc",
+              title: "✍️ Card Description",
+              type: "string",
+              description: "Short description of what visitors will find",
+              placeholder: "What to expect on Sunday"
+            },
+            {
+              name: "to",
+              title: "🔗 Link Path",
+              type: "string",
+              description: "Where this card links to (e.g., '/new-here', '/contact')",
+              placeholder: "/new-here"
+            },
           ],
+          preview: {
+            select: {
+              title: 'label',
+              subtitle: 'desc'
+            }
+          }
         },
       ],
     },
     {
       name: "faqBadge",
-      title: "FAQ Badge",
+      title: "🏷️ FAQ section label",
       type: "string",
-      description: "e.g. FAQ",
+      description: "Small badge for the FAQ section",
+      placeholder: "FAQ",
     },
     {
       name: "faqTitle",
-      title: "FAQ Title",
+      title: "❓ FAQ section heading",
       type: "string",
-      description: "e.g. Questions? Here are the answers.",
+      description: "Main title for the FAQ section",
+      placeholder: "Questions? Here are the answers.",
     },
     {
       name: "faqSubtitle",
-      title: "FAQ Subtitle",
+      title: "✍️ FAQ description",
       type: "text",
       rows: 2,
+      description: "Brief intro for the FAQ section",
     },
     {
       name: "faqs",
-      title: "Frequently Asked Questions (FAQ)",
+      title: "💬 Frequently Asked Questions",
       type: "array",
+      description: "Add questions and answers here. Click 'Add item' to add a new FAQ.",
       of: [
         {
           type: "object",
           fields: [
-            { name: "q", title: "Question", type: "string" },
-            { name: "a", title: "Answer", type: "text", rows: 3 },
+            {
+              name: "q",
+              title: "❓ Question",
+              type: "string",
+              description: "The question visitors ask",
+              placeholder: "What should I wear to church?"
+            },
+            {
+              name: "a",
+              title: "💬 Answer",
+              type: "text",
+              rows: 3,
+              description: "Your answer to the question",
+              placeholder: "Come as you are! We welcome everyone regardless of what you wear."
+            },
           ],
+          preview: {
+            select: {
+              title: 'q',
+              subtitle: 'a'
+            }
+          }
         },
       ],
     },
     {
       name: "faqMoreTitle",
-      title: "FAQ Footer Card Title",
+      title: "💡 FAQ footer card title",
       type: "string",
-      description: "e.g. Got more questions?",
+      description: "Title for the card at the bottom of FAQs",
+      placeholder: "Got more questions?",
     },
     {
       name: "faqMoreText",
-      title: "FAQ Footer Card Text",
+      title: "📝 FAQ footer card text",
       type: "string",
-      description: "e.g. Reach out anytime — we'd love to hear from you.",
+      description: "Text encouraging people to reach out",
+      placeholder: "Reach out anytime — we'd love to hear from you.",
     },
     {
       name: "ctaBadge",
-      title: "Bottom CTA Badge",
+      title: "🏷️ Bottom call-to-action label",
       type: "string",
-      description: "e.g. Get started",
+      description: "Small badge for the final CTA section",
+      placeholder: "Get started",
     },
     {
       name: "ctaTitle",
-      title: "Bottom CTA Title",
+      title: "📣 Bottom call-to-action heading",
       type: "string",
-      description: "e.g. A seat is saved for you.",
+      description: "Final invitation headline",
+      placeholder: "A seat is saved for you.",
     },
     {
       name: "ctaSubtitle",
-      title: "Bottom CTA Subtitle",
+      title: "✍️ Bottom call-to-action text",
       type: "string",
-      description: "e.g. Join us this Sunday at 9:30 and 11 AM. All are welcome.",
+      description: "Final invitation message",
+      placeholder: "Join us this Sunday at 9:30 and 11 AM. All are welcome.",
     },
     {
       name: "ctaTrust",
-      title: "Bottom CTA Trust Line",
+      title: "📅 Bottom trust banner",
       type: "string",
-      description: "e.g. Every Sunday · Malayalam & English · All are welcome",
+      description: "Final service times reminder",
+      placeholder: "Every Sunday · Malayalam & English · All are welcome",
     },
   ],
 };
