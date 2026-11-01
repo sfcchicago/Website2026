@@ -1,4 +1,15 @@
-import { logoField } from "./imageFields";
+const logoField = {
+  type: "image",
+  options: { hotspot: true },
+  fields: [
+    {
+      name: "alt",
+      title: "Alternative Text",
+      type: "string",
+      description: "Describe the logo for accessibility",
+    },
+  ],
+};
 
 export default {
   name: "churchInfo",
