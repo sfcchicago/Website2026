@@ -202,18 +202,15 @@ export default function Pastor() {
               </blockquote>
 
               <div className="aesthetic-card-bottom">
-                <div className="aesthetic-divider" />
-
                 <div className="aesthetic-pills-row">
                   {pillsList.map((pill, i) => (
-                    <motion.span
+                    <div
                       key={pill || i}
                       className="aesthetic-pill"
-                      whileHover={{ y: -2, scale: 1.03 }}
-                      transition={{ type: "spring", stiffness: 450, damping: 20 }}
                     >
-                      {i === 0 ? <MapPin weight="duotone" /> : i === 1 ? <Heart weight="duotone" /> : i === 2 ? <GraduationCap weight="duotone" /> : <Church weight="duotone" />} {pill}
-                    </motion.span>
+                      {i === 0 ? <MapPin weight="duotone" /> : i === 1 ? <Heart weight="duotone" /> : i === 2 ? <GraduationCap weight="duotone" /> : <Church weight="duotone" />}
+                      <span>{pill}</span>
+                    </div>
                   ))}
                 </div>
               </div>

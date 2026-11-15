@@ -346,6 +346,7 @@ em { font-style: italic; color: var(--accent-light); }
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
+  justify-items: center;
   column-gap: clamp(24px, 3vw, 48px);
   width: 100%;
   height: 80px;
@@ -1317,51 +1318,28 @@ em { font-style: italic; color: var(--accent-light); }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(145deg, rgba(22, 42, 74, 0.75) 0%, rgba(16, 31, 56, 0.9) 100%);
-  backdrop-filter: blur(24px) saturate(170%);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--r-lg);
-  padding: clamp(22px, 3.2vw, 28px);
-  box-shadow:
-    0 12px 36px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.2);
-  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.45s var(--ease);
-  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: clamp(28px, 4vw, 36px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 [data-theme="light"] .pastor-aesthetic-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.92) 100%);
-  border-color: rgba(37, 99, 235, 0.15);
-  box-shadow:
-    0 16px 40px -12px rgba(14, 43, 94, 0.1),
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 8px 24px rgba(0, 0, 0, 0.04);
 }
 
 .pastor-aesthetic-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(96, 165, 250, 0.4);
-  box-shadow:
-    0 22px 50px -15px var(--accent-glow),
-    inset 0 1px 2px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  border-color: var(--line-hi);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .card-ambient-glow {
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 180px;
-  height: 180px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-  filter: blur(32px);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.6;
-  transition: opacity 0.5s var(--ease);
-}
-
-.pastor-aesthetic-card:hover .card-ambient-glow {
-  opacity: 0.9;
+  display: none;
 }
 
 .aesthetic-card-top {
@@ -1371,39 +1349,45 @@ em { font-style: italic; color: var(--accent-light); }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
 }
 
 .aesthetic-card-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--accent-light);
+  color: var(--text-2);
 }
 
 .aesthetic-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: var(--accent-2);
-  box-shadow: 0 0 10px var(--accent-2);
-  animation: pulse-dot 2.4s infinite ease-in-out;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 .aesthetic-year {
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #fff;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  padding: 3px 10px;
-  border-radius: var(--r-pill);
-  box-shadow: 0 2px 10px -2px var(--accent-glow);
+  color: var(--accent);
+  padding: 6px 14px;
+  border-radius: var(--r);
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.12);
+}
+
+[data-theme="light"] .aesthetic-year {
+  background: rgba(37, 99, 235, 0.06);
+  border-color: rgba(37, 99, 235, 0.1);
 }
 
 .aesthetic-quote {
@@ -1411,11 +1395,10 @@ em { font-style: italic; color: var(--accent-light); }
   z-index: 1;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(18px, 2vw, 21.5px);
-  line-height: 1.55;
+  font-size: clamp(18px, 2vw, 21px);
+  line-height: 1.6;
   color: var(--text);
-  margin: auto 0;
-  padding: 10px 0;
+  margin: 0 0 24px;
   letter-spacing: -0.01em;
   text-wrap: pretty;
 }
@@ -1427,65 +1410,59 @@ em { font-style: italic; color: var(--accent-light); }
 }
 
 .aesthetic-divider {
-  position: relative;
-  z-index: 1;
-  height: 1px;
-  background: linear-gradient(90deg, var(--line-hi), transparent);
-  margin-bottom: 16px;
+  display: none;
 }
 
 .aesthetic-pills-row {
   position: relative;
   z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
 }
 
 .aesthetic-pill {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: var(--r-pill);
-  font-size: 12.5px;
+  padding: 14px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  font-size: 13px;
   font-weight: 500;
-  color: var(--muted);
-  transition: all 0.3s var(--ease);
-  cursor: default;
-}
-
-.aesthetic-pill svg {
-  font-size: 14px;
-  color: var(--accent-2);
-  transition: transform 0.3s var(--ease-spring);
-}
-
-.aesthetic-pill:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(96, 165, 250, 0.3);
-  color: var(--text);
-  box-shadow: 0 4px 12px -3px rgba(0, 0, 0, 0.3);
-}
-
-.aesthetic-pill:hover svg {
-  transform: scale(1.15);
-  color: #fff;
+  color: var(--text-2);
+  transition: all 0.2s ease;
+  text-align: left;
 }
 
 [data-theme="light"] .aesthetic-pill {
-  background: rgba(15, 23, 42, 0.03);
-  border-color: rgba(15, 23, 42, 0.08);
-  color: var(--text-2);
+  background: var(--surface-2);
+  border-color: rgba(15, 23, 42, 0.06);
+}
+
+.aesthetic-pill svg {
+  font-size: 18px;
+  color: var(--accent);
+  margin-bottom: 2px;
+  transition: transform 0.2s ease;
+}
+
+.aesthetic-pill:hover {
+  background: var(--surface);
+  border-color: var(--line-hi);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 [data-theme="light"] .aesthetic-pill:hover {
-  background: rgba(37, 99, 235, 0.08);
-  border-color: rgba(37, 99, 235, 0.25);
-  color: var(--accent-light);
-  box-shadow: 0 4px 12px -3px rgba(37, 99, 235, 0.15);
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.aesthetic-pill:hover svg {
+  transform: translateY(-2px);
 }
 .pastor-bio-col {
   display: flex;
