@@ -92,16 +92,19 @@ export default function Nav() {
 
           <div className="nav-links">
             {nav.map((n) => {
-              const isActive = currentPath === n.href;
+              const linkPath = n.href.replace(/\/+$/, "") || "/";
+              const isActive = currentPath === linkPath;
               return (
                 <NavLink
                   key={n.href}
                   to={n.href}
-                  onClick={resetScrollAndNav}
+                  onClick={(e) => {
+                    resetScrollAndNav();
+                  }}
                   onMouseEnter={() => preloadRoute(n.href)}
                   onTouchStart={() => preloadRoute(n.href)}
-                  onFocus={() => preloadRoute(n.href)}
-                  className={({ isActive: a }) => (a || isActive ? "active" : "")}
+                  className={isActive ? "active" : ""}
+                  end
                 >
                   <span>{n.label}</span>
                 </NavLink>
