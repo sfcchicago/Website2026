@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon } from "@phosphor-icons/react";
 import { nav, church } from "../data";
 import { preloadRoute } from "../utils/preload";
@@ -9,7 +9,6 @@ import { useSiteSettings } from "../context/SiteContext";
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hoveredPath, setHoveredPath] = useState(null);
   const [theme, setTheme] = useState(() => localStorage.getItem("sfc-theme") || "light");
   const loc = useLocation();
   const timerRef = useRef(null);
@@ -66,7 +65,6 @@ export default function Nav() {
   const currentPath = loc.pathname.replace(/\/+$/, "") || "/";
 
   const resetScrollAndNav = () => {
-    setHoveredPath(null);
     if (window.lenis) {
       window.lenis.scrollTo(0, { immediate: true });
     }
@@ -92,50 +90,24 @@ export default function Nav() {
             <img src={settings?.logo || church.logo} alt={settings?.name || "Sharon Fellowship Church"} />
           </Link>
 
-          <LayoutGroup id="nav-pill">
-            <div className="nav-links" onMouseLeave={() => setHoveredPath(null)}>
-              {nav.map((n) => {
-                const isActive = currentPath === n.href;
-                const isHovered = hoveredPath === n.href;
-                return (
-                  <NavLink
-                    key={n.href}
-                    to={n.href}
-                    onClick={resetScrollAndNav}
-                    onMouseEnter={() => {
-                      setHoveredPath(n.href);
-                      preloadRoute(n.href);
-                    }}
-                    onTouchStart={() => preloadRoute(n.href)}
-                    onFocus={() => {
-                      setHoveredPath(n.href);
-                      preloadRoute(n.href);
-                    }}
-                    className={({ isActive: a }) => (a || isActive ? "active" : "")}
-                  >
-                    <span>{n.label}</span>
-                    {isActive && (
-                      <motion.span
-                        className="nav-active-pill"
-                        layoutId="activeNavPill"
-                        transition={{ type: "spring", stiffness: 420, damping: 32 }}
-                      />
-                    )}
-                    {isHovered && !isActive && (
-                      <motion.span
-                        className="nav-hover-pill"
-                        layoutId="hoverNavPill"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                      />
-                    )}
-                  </NavLink>
-                );
-              })}
-            </div>
-          </LayoutGroup>
+          <div className="nav-links">
+            {nav.map((n) => {
+              const isActive = currentPath === n.href;
+              return (
+                <NavLink
+                  key={n.href}
+                  to={n.href}
+                  onClick={resetScrollAndNav}
+                  onMouseEnter={() => preloadRoute(n.href)}
+                  onTouchStart={() => preloadRoute(n.href)}
+                  onFocus={() => preloadRoute(n.href)}
+                  className={({ isActive: a }) => (a || isActive ? "active" : "")}
+                >
+                  <span>{n.label}</span>
+                </NavLink>
+              );
+            })}
+          </div>
 
           <div className="nav-cta">
             <button
