@@ -321,35 +321,39 @@ em { font-style: italic; color: var(--accent-light); }
    NAV Ã¢â‚¬â€ Apple Liquid Glass Pill Nav (Symmetrical)
    ============================================================ */
 /* ============================================================
-   NAVIGATION — Clean, Professional & Church-Appropriate
+   NAVIGATION — Clean & Legible
    ============================================================ */
 .nav {
-  position: fixed; top: 0; left: 0; right: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: var(--z-nav);
-  display: flex; justify-content: center;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  background: transparent;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  background: var(--bg);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .nav.scrolled {
-  background: var(--bg);
-  border-bottom: 1px solid var(--line);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-bottom-color: var(--line);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .nav {
+  background: #ffffff;
 }
 [data-theme="light"] .nav.scrolled {
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 0 rgba(0, 0, 0, 0.03);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 .nav-inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   justify-items: center;
-  column-gap: clamp(24px, 3vw, 48px);
+  column-gap: clamp(32px, 4vw, 64px);
   width: 100%;
-  height: 80px;
+  height: 72px;
   min-width: 0;
   max-width: var(--maxw);
   margin: 0 auto;
@@ -358,7 +362,7 @@ em { font-style: italic; color: var(--accent-light); }
   transition: height 0.3s ease;
 }
 .nav.scrolled .nav-inner {
-  height: 70px;
+  height: 68px;
 }
 .nav-brand {
   position: relative;
@@ -370,10 +374,10 @@ em { font-style: italic; color: var(--accent-light); }
   transition: opacity 0.2s ease;
 }
 .nav-brand:hover {
-  opacity: 0.8;
+  opacity: 0.75;
 }
 .nav-brand img {
-  height: 38px;
+  height: 36px;
   width: auto;
   max-width: 180px;
   object-fit: contain;
@@ -382,7 +386,7 @@ em { font-style: italic; color: var(--accent-light); }
   transition: height 0.3s ease;
 }
 .nav.scrolled .nav-brand img {
-  height: 34px;
+  height: 33px;
 }
 [data-theme="light"] .nav-brand img,
 [data-theme="light"] .footer-brand img {
@@ -394,15 +398,15 @@ em { font-style: italic; color: var(--accent-light); }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
 }
 .nav-links a {
   position: relative;
   font-size: 15px;
-  font-weight: 450;
+  font-weight: 500;
   letter-spacing: -0.01em;
   color: var(--text-2);
-  padding: 8px 18px;
+  padding: 10px 20px;
   border-radius: 8px;
   white-space: nowrap;
   transition: color 0.15s ease, background 0.15s ease;
@@ -414,19 +418,23 @@ em { font-style: italic; color: var(--accent-light); }
 }
 .nav-links a:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
+}
+[data-theme="light"] .nav-links a {
+  color: var(--text-2);
 }
 [data-theme="light"] .nav-links a:hover {
+  color: var(--text);
   background: rgba(0, 0, 0, 0.03);
 }
 .nav-links a.active {
   color: var(--text);
-  background: rgba(59, 130, 246, 0.12);
-  font-weight: 480;
+  background: rgba(59, 130, 246, 0.1);
+  font-weight: 500;
 }
 [data-theme="light"] .nav-links a.active {
   color: var(--accent);
-  background: rgba(37, 99, 235, 0.08);
+  background: rgba(37, 99, 235, 0.06);
 }
 .nav-active-pill,
 .nav-hover-pill {
@@ -1318,24 +1326,24 @@ em { font-style: italic; color: var(--accent-light); }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  padding: clamp(28px, 4vw, 36px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: clamp(32px, 4vw, 48px) 0;
+  box-shadow: none;
+  transition: none;
 }
 
 [data-theme="light"] .pastor-aesthetic-card {
-  background: #ffffff;
-  border-color: rgba(15, 23, 42, 0.08);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 8px 24px rgba(0, 0, 0, 0.04);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .pastor-aesthetic-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--line-hi);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: none;
+  border-color: transparent;
+  box-shadow: none;
 }
 
 .card-ambient-glow {
@@ -1348,46 +1356,36 @@ em { font-style: italic; color: var(--accent-light); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
   border-bottom: 1px solid var(--line);
 }
 
 .aesthetic-card-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  gap: 10px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--text-2);
 }
 
 .aesthetic-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 .aesthetic-year {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--accent);
-  padding: 6px 14px;
-  border-radius: var(--r);
-  background: rgba(59, 130, 246, 0.08);
-  border: 1px solid rgba(59, 130, 246, 0.12);
-}
-
-[data-theme="light"] .aesthetic-year {
-  background: rgba(37, 99, 235, 0.06);
-  border-color: rgba(37, 99, 235, 0.1);
+  color: var(--muted);
 }
 
 .aesthetic-quote {
@@ -1395,10 +1393,10 @@ em { font-style: italic; color: var(--accent-light); }
   z-index: 1;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(18px, 2vw, 21px);
-  line-height: 1.6;
+  font-size: clamp(20px, 2.2vw, 24px);
+  line-height: 1.65;
   color: var(--text);
-  margin: 0 0 24px;
+  margin: 0 0 32px;
   letter-spacing: -0.01em;
   text-wrap: pretty;
 }
@@ -1417,48 +1415,49 @@ em { font-style: italic; color: var(--accent-light); }
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
 }
 
 .aesthetic-pill {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 14px 16px;
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  font-size: 13px;
+  gap: 8px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-2);
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
   text-align: left;
 }
 
 [data-theme="light"] .aesthetic-pill {
-  background: var(--surface-2);
-  border-color: rgba(15, 23, 42, 0.06);
+  background: transparent;
+  border: none;
 }
 
 .aesthetic-pill svg {
-  font-size: 18px;
+  font-size: 22px;
   color: var(--accent);
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   transition: transform 0.2s ease;
 }
 
 .aesthetic-pill:hover {
-  background: var(--surface);
-  border-color: var(--line-hi);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: transparent;
+  border: none;
+  transform: none;
+  box-shadow: none;
+  color: var(--text);
 }
 
 [data-theme="light"] .aesthetic-pill:hover {
-  background: #ffffff;
-  border-color: rgba(15, 23, 42, 0.12);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .aesthetic-pill:hover svg {
